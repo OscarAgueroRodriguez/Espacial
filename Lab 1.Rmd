@@ -2,29 +2,75 @@
 title: "Lab 1"
 author: "Óscar Agüero Rodriguez"
 date: "30/8/2020"
-output: html_document
+output: 
+  github_document:
+    toc: TRUE
+    toc_depth: 2
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+Paquetes a utilizar
+
+```{r}
+library(tidyverse)
+library(sf)
+library(mapview)
+library(abind)
+library(stars)
+library(RSQLite)
+library(spacetime)
+library(xts)
+library(starsdata)
+library(spData)
+library(spDataLarge)
+library(units)
+library(cubelyr)
+
 ```
 
-## R Markdown
+# Lab 1.3
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+## 1.3.1 Read the shapefile storms_xyz_feature from the shape directory in the sf package
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
+```{r}
+tst = st_read(system.file("shape/storms_xyz_feature.shp", package="sf"), quiet = TRUE)
+class(st_geometry(tst))
+class(st_geometry(tst)[[1]])
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
+## 1.3.2 Copy this file to another directory on your computer, and read it from there (note: a shapefile consists of more than one file!)
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r}
+setwd("~/Estadística/Spacial Stats/Storms_xyz")
+tst1 <- st_read("storms_xyz_feature.shp")
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+## 1.3.3 How many features does this dataset contain?
+
+```{r}
+tst1
+```
+
+Tiene 71 features
+
+## 1.3.4 Plot the dataset, with axes = TRUE (hint: before plotting, pipe through st_zm to drop Z and M coordinates; more about this in chapter 3).
+
+```{r}
+system.file("shape/storms_xyz_feature.shp", package="sf") %>%
+  read_sf() %>%
+  st_zm() %>% 
+  plot(graticule = TRUE, axes = TRUE)
+
+```
+## 1.3.5 Before plotting, pipe the dataset through st_set_crs(4326). What is different in the plot obtained?
+
+```{r}
+system.file("shape/storms_xyz_feature.shp", package="sf") %>%
+  read_sf() %>%
+  st_zm() %>% 
+  st_set_crs(4326) %>% 
+  plot(graticule = TRUE, axes = TRUE)
+```
+
+
+

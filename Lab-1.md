@@ -16,6 +16,9 @@ Lab 1
         plotting, pipe through st\_zm to drop Z and M coordinates; more
         about this in chapter
         3).](#plot-the-dataset-with-axes-true-hint-before-plotting-pipe-through-st_zm-to-drop-z-and-m-coordinates-more-about-this-in-chapter-3.)
+      - [1.3.5 Before plotting, pipe the dataset through
+        st\_set\_crs(4326). What is different in the plot
+        obtained?](#before-plotting-pipe-the-dataset-through-st_set_crs4326.-what-is-different-in-the-plot-obtained)
 
 Paquetes a utilizar
 
@@ -146,9 +149,9 @@ system.file("shape/storms_xyz_feature.shp", package="sf") %>%
   plot(graticule = TRUE, axes = TRUE)
 ```
 
-![](Lab-1_files/figure-gfm/unnamed-chunk-5-1.png)<!-- --> \#\# 1.3.5
-Before plotting, pipe the dataset through st\_set\_crs(4326). What is
-different in the plot obtained?
+![](Lab-1_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
+
+## 1.3.5 Before plotting, pipe the dataset through st\_set\_crs(4326). What is different in the plot obtained?
 
 ``` r
 system.file("shape/storms_xyz_feature.shp", package="sf") %>%

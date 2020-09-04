@@ -133,6 +133,81 @@ copor4 <- cbind(c4, p4);copor4
 
 Convert the polar $(r,\phi)$ points (10, 45°), (0,100°) and (5,359°) to cartesian coordinates
 
+```{r}
+r1 <- 10;phi1 <- 45
+r2 <- 0; phi2 <- 100
+r3 <- 5; phi3 <- 359
+
+x_1 <- r1*cos(phi1)
+y_1 <- r1*sin(phi1)
+
+x_2 <- r2*cos(phi2)
+y_2 <- r2*sin(phi2)
+
+x_3 <- r3*cos(phi3)
+y_3 <- r3*sin(phi3)
+
+cc1 <- round(cbind(x_1,y_1),1)
+cc2 <- round(cbind(x_2,y_2),1)
+cc3 <- round(cbind(x_3,y_3),1)
+
+resumen <- cbind(cc1, cc2, cc3)
+resumen
+
+```
+
+## 2.6.3
+
+Assuming the Earth is a sphere with a radius of 6371 km, compute for $(\lambda, \phi)$ points the great circle distance between (10,10) and (11,10), between (10,80) and (11,80), between (10,10) and (11,10) and between (10,80) and (11,81) (units: degree): What the distance units?
+
+Para dos punto $p_1 = (\lambda_1, \phi_1)$ y $p_2 = (\lambda_2, \phi_2)$, donde $p_1$ y $p_2$ deben ser calculados en radianes, se debe convertir primero los grados a Radianes.
+
+Eso se realiza entendiendo que:
+
+$$1° = \frac{\pi}{180}$$
+
+Conversión
+
+```{r}
+lambda1 <- 10*(pi/180)
+theta1 <- 10*(pi/180)
+lambda2 <- 11*(pi/180)
+theta2 <- 10*(pi/180)
+
+lambda3 <- 10*(pi/180)
+theta3 <- 80*(pi/180)
+lambda4 <- 11*(pi/180)
+theta4 <- 80*(pi/180)
+
+lambda5 <- 10*(pi/180)
+theta5 <- 10*(pi/180)
+lambda6 <- 10*(pi/180)
+theta6 <- 11*(pi/180)
+
+lambda7 <- 10*(pi/180)
+theta7 <- 80*(pi/180)
+lambda8 <- 10*(pi/180)
+theta8 <- 81*(pi/180)
+
+r <- 6371
+```
+
+Para obtener la distancia además, se debe aplicar la siguiente formulas en esta secuencia
+
+$$\theta_{12} = arccos(sin(\theta_1)*sin(\theta_2)+cos(\theta_1)*cos(\theta_2)cos(|\lambda_1 - \lambda_2|))$$
+
+$$S_{12} = r*\theta_{12}$$
+
+Distancia (1,2) entre arco (10,10) y (11,10)
+
+```{r}
+theta12 <- acos(sin(theta1)*sin(theta2)+cos(theta1)*cos(theta2)*cos(abs(lambda1-lambda2)))
+s12 <- r*theta12
+s_12g <- (s12*180)/pi 
+
+s12;s_12g
+
+```
 
 
 

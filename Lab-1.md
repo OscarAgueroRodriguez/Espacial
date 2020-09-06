@@ -3,88 +3,47 @@ Lab 1
 Óscar Agüero Rodriguez
 30/8/2020
 
-  - [Lab 1.3](#lab-1.3)
-      - [1.3.1 Read the shapefile storms\_xyz\_feature from the shape
-        directory in the sf
-        package](#read-the-shapefile-storms_xyz_feature-from-the-shape-directory-in-the-sf-package)
-      - [1.3.2 Copy this file to another directory on your computer, and
-        read it from there (note: a shapefile consists of more than one
-        file\!)](#copy-this-file-to-another-directory-on-your-computer-and-read-it-from-there-note-a-shapefile-consists-of-more-than-one-file)
-      - [1.3.3 How many features does this dataset
-        contain?](#how-many-features-does-this-dataset-contain)
-      - [1.3.4 Plot the dataset, with axes = TRUE (hint: before
-        plotting, pipe through st\_zm to drop Z and M coordinates; more
-        about this in chapter
-        3).](#plot-the-dataset-with-axes-true-hint-before-plotting-pipe-through-st_zm-to-drop-z-and-m-coordinates-more-about-this-in-chapter-3.)
-      - [1.3.5 Before plotting, pipe the dataset through
-        st\_set\_crs(4326). What is different in the plot
-        obtained?](#before-plotting-pipe-the-dataset-through-st_set_crs4326.-what-is-different-in-the-plot-obtained)
-  - [Prueba](#prueba)
+  - [1.3 Exercises](#exercises)
+      - [1.3.1](#section)
+      - [1.3.2](#section-1)
+      - [1.3.3](#section-2)
+      - [1.3.4](#section-3)
+      - [1.3.5](#section-4)
+  - [2.6 Exercices](#exercices)
+      - [2.6.1](#section-5)
+      - [2.6.2](#section-6)
+      - [2.6.3](#section-7)
+  - [4.4 Exercises](#exercises-1)
+      - [4.4.1](#section-8)
+      - [4.4.2](#section-9)
+      - [4.4.3](#section-10)
+      - [4.4.4](#section-11)
 
 Paquetes a utilizar
 
 ``` r
-library(tidyverse)
+suppressPackageStartupMessages(library(tidyverse))
+suppressPackageStartupMessages(library(sf))
+suppressPackageStartupMessages(library(mapview))
+suppressPackageStartupMessages(library(abind))
+suppressPackageStartupMessages(library(stars))
+suppressPackageStartupMessages(library(RSQLite))
+suppressPackageStartupMessages(library(spacetime))
+suppressPackageStartupMessages(library(xts))
+suppressPackageStartupMessages(library(starsdata))
+suppressPackageStartupMessages(library(spData))
+suppressPackageStartupMessages(library(spDataLarge))
+suppressPackageStartupMessages(library(units))
+suppressPackageStartupMessages(library(cubelyr))
+suppressPackageStartupMessages(library(tmap))
 ```
 
-    ## -- Attaching packages ------------------------------------------------------- tidyverse 1.3.0 --
+# 1.3 Exercises
 
-    ## v ggplot2 3.3.2     v purrr   0.3.4
-    ## v tibble  3.0.3     v dplyr   1.0.1
-    ## v tidyr   1.1.1     v stringr 1.4.0
-    ## v readr   1.3.1     v forcats 0.5.0
+## 1.3.1
 
-    ## -- Conflicts ---------------------------------------------------------- tidyverse_conflicts() --
-    ## x dplyr::filter() masks stats::filter()
-    ## x dplyr::lag()    masks stats::lag()
-
-``` r
-library(sf)
-```
-
-    ## Linking to GEOS 3.8.0, GDAL 3.0.4, PROJ 6.3.1
-
-``` r
-library(mapview)
-library(abind)
-library(stars)
-library(RSQLite)
-library(spacetime)
-library(xts)
-```
-
-    ## Loading required package: zoo
-
-    ## 
-    ## Attaching package: 'zoo'
-
-    ## The following objects are masked from 'package:base':
-    ## 
-    ##     as.Date, as.Date.numeric
-
-    ## 
-    ## Attaching package: 'xts'
-
-    ## The following objects are masked from 'package:dplyr':
-    ## 
-    ##     first, last
-
-``` r
-library(starsdata)
-library(spData)
-library(spDataLarge)
-library(units)
-```
-
-    ## udunits system database from C:/Users/Oscar/Documents/R/win-library/4.0/units/share/udunits
-
-``` r
-library(cubelyr)
-```
-
-# Lab 1.3
-
-## 1.3.1 Read the shapefile storms\_xyz\_feature from the shape directory in the sf package
+Read the shapefile storms\_xyz\_feature from the shape directory in the
+sf package
 
 ``` r
 tst = st_read(system.file("shape/storms_xyz_feature.shp", package="sf"), quiet = TRUE)
@@ -99,7 +58,10 @@ class(st_geometry(tst)[[1]])
 
     ## [1] "XYZ"        "LINESTRING" "sfg"
 
-## 1.3.2 Copy this file to another directory on your computer, and read it from there (note: a shapefile consists of more than one file\!)
+## 1.3.2
+
+Copy this file to another directory on your computer, and read it from
+there (note: a shapefile consists of more than one file\!)
 
 ``` r
 setwd("~/Estadística/Spacial Stats/Storms_xyz")
@@ -114,7 +76,9 @@ tst1 <- st_read("storms_xyz_feature.shp")
     ## z_range:        zmin: 924 zmax: 1017
     ## CRS:            NA
 
-## 1.3.3 How many features does this dataset contain?
+## 1.3.3
+
+How many features does this dataset contain?
 
 ``` r
 tst1
@@ -141,7 +105,10 @@ tst1
 
 Tiene 71 features
 
-## 1.3.4 Plot the dataset, with axes = TRUE (hint: before plotting, pipe through st\_zm to drop Z and M coordinates; more about this in chapter 3).
+## 1.3.4
+
+Plot the dataset, with axes = TRUE (hint: before plotting, pipe through
+st\_zm to drop Z and M coordinates; more about this in chapter 3).
 
 ``` r
 system.file("shape/storms_xyz_feature.shp", package="sf") %>%
@@ -152,7 +119,10 @@ system.file("shape/storms_xyz_feature.shp", package="sf") %>%
 
 ![](Lab-1_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
-## 1.3.5 Before plotting, pipe the dataset through st\_set\_crs(4326). What is different in the plot obtained?
+## 1.3.5
+
+Before plotting, pipe the dataset through st\_set\_crs(4326). What is
+different in the plot obtained?
 
 ``` r
 system.file("shape/storms_xyz_feature.shp", package="sf") %>%
@@ -164,4 +134,812 @@ system.file("shape/storms_xyz_feature.shp", package="sf") %>%
 
 ![](Lab-1_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
 
-# Prueba
+La diferencia observada esta principalmente en las coordenadas del
+plano, en el segunndo plano se pueden ver la dirección de los grados en
+los margenes.
+
+# 2.6 Exercices
+
+## 2.6.1
+
+Convert \((x , y)\) point (10,2), (-10,-2), (10,2) and (0,10) to polar
+coordinates
+
+Coordenada (10,2)
+
+``` r
+x1 <- 10; y1 <- 2
+c1 <- sqrt(x1^2 + y1^2)
+p1 <- atan(y1/x1)
+copor1 <- cbind(c1, p1);copor1
+```
+
+    ##            c1        p1
+    ## [1,] 10.19804 0.1973956
+
+Coordenada (-10,-2)
+
+``` r
+x2 <- -10; y2 <- -2
+c2 <- sqrt(x2^2 + y2^2)
+p2 <- atan(y2/x2)
+copor2 <- cbind(c2, p2);copor2
+```
+
+    ##            c2        p2
+    ## [1,] 10.19804 0.1973956
+
+Coordenada (10,-2)
+
+``` r
+x3 <- 10; y3 <- -2
+c3 <- sqrt(x3^2 + y3^2)
+p3 <- atan(y3/x3)
+copor3 <- cbind(c3, p3);copor3
+```
+
+    ##            c3         p3
+    ## [1,] 10.19804 -0.1973956
+
+Coordenada (0,10)
+
+``` r
+x4 <- 0; y4 <- 10
+c4 <- sqrt(x4^2 + y4^2)
+p4 <- atan(y4/x4)
+copor4 <- cbind(c4, p4);copor4
+```
+
+    ##      c4       p4
+    ## [1,] 10 1.570796
+
+## 2.6.2
+
+Convert the polar \((r,\phi)\) points (10, 45°), (0,100°) and (5,359°)
+to cartesian coordinates
+
+``` r
+r1 <- 10;phi1 <- 45
+r2 <- 0; phi2 <- 100
+r3 <- 5; phi3 <- 359
+
+x_1 <- r1*cos(phi1)
+y_1 <- r1*sin(phi1)
+
+x_2 <- r2*cos(phi2)
+y_2 <- r2*sin(phi2)
+
+x_3 <- r3*cos(phi3)
+y_3 <- r3*sin(phi3)
+
+cc1 <- round(cbind(x_1,y_1),1)
+cc2 <- round(cbind(x_2,y_2),1)
+cc3 <- round(cbind(x_3,y_3),1)
+
+resumen <- cbind(cc1, cc2, cc3)
+resumen
+```
+
+    ##      x_1 y_1 x_2 y_2 x_3 y_3
+    ## [1,] 5.3 8.5   0   0 3.3 3.8
+
+## 2.6.3
+
+Assuming the Earth is a sphere with a radius of 6371 km, compute for
+\((\lambda, \phi)\) points the great circle distance between (10,10) and
+(11,10), between (10,80) and (11,80), between (10,10) and (11,10) and
+between (10,80) and (11,81) (units: degree): What the distance units?
+
+Para dos punto \(p_1 = (\lambda_1, \phi_1)\) y
+\(p_2 = (\lambda_2, \phi_2)\), donde \(p_1\) y \(p_2\) deben ser
+calculados en radianes, se debe convertir primero los grados a Radianes.
+
+Eso se realiza entendiendo que:
+
+\[1° = \frac{\pi}{180}\]
+
+Conversión
+
+``` r
+lambda1 <- 10*(pi/180)
+theta1 <- 10*(pi/180)
+lambda2 <- 11*(pi/180)
+theta2 <- 10*(pi/180)
+
+lambda3 <- 10*(pi/180)
+theta3 <- 80*(pi/180)
+lambda4 <- 11*(pi/180)
+theta4 <- 80*(pi/180)
+
+lambda5 <- 10*(pi/180)
+theta5 <- 10*(pi/180)
+lambda6 <- 10*(pi/180)
+theta6 <- 11*(pi/180)
+
+lambda7 <- 10*(pi/180)
+theta7 <- 80*(pi/180)
+lambda8 <- 10*(pi/180)
+theta8 <- 81*(pi/180)
+
+r <- 6371
+```
+
+Para obtener la distancia además, se debe aplicar la siguiente formulas
+en esta secuencia
+
+\[\theta_{12} = arccos(sin(\theta_1)*sin(\theta_2)+cos(\theta_1)*cos(\theta_2)cos(|\lambda_1 - \lambda_2|))\]
+
+\[S_{12} = r*\theta_{12}\]
+
+Distancia (1,2) entre arco (10,10) y (11,10)
+
+``` r
+theta12 <- acos(sin(theta1)*sin(theta2)+cos(theta1)*cos(theta2)*cos(abs(lambda1-lambda2)))
+s12 <- r*theta12
+s_12g <- (s12*180)/pi 
+
+s12;s_12g
+```
+
+    ## [1] 109.5056
+
+    ## [1] 6274.208
+
+Distancia (3,4) entre arco (10,80) y (11,80)
+
+``` r
+theta34 <- acos(sin(theta3)*sin(theta4)+cos(theta3)*cos(theta4)*cos(abs(lambda3-lambda4)))
+s34 <- r*theta34
+s_34g <- (s34*180)/pi 
+
+s34;s_34g
+```
+
+    ## [1] 19.30856
+
+    ## [1] 1106.299
+
+Distancia (5,6) entre arco (10,10) y (10,11)
+
+``` r
+theta56 <- acos(sin(theta5)*sin(theta6)+cos(theta5)*cos(theta6)*cos(abs(lambda5-lambda6)))
+s56 <- r*theta56
+s_56g <- (s56*180)/pi 
+
+s56;s_56g
+```
+
+    ## [1] 111.1949
+
+    ## [1] 6371
+
+Distancia (7,8) entre arco (10,80) y (10,81)
+
+``` r
+theta78 <- acos(sin(theta7)*sin(theta8)+cos(theta7)*cos(theta8)*cos(abs(lambda7-lambda8)))
+s78 <- r*theta78
+s_78g <- (s78*180)/pi 
+
+s78;s_78g
+```
+
+    ## [1] 111.1949
+
+    ## [1] 6371
+
+# 4.4 Exercises
+
+## 4.4.1
+
+NDVI, normalized differenced vegetation index, is computed as
+(NIR-R)/(NIR+R), with NIR the near infrared and R the red band. Read the
+L7\_ETMs.tif file into object x, and distribute the band dimensions over
+attributes by split(x,“band”). Then, compute NDVI by using a expression
+that uses the NIR (band 4) and R (band 3) attributes directly.
+
+``` r
+tif = system.file("tif/L7_ETMs.tif", package = "stars")
+x = read_stars(tif)
+split(x,"band")
+```
+
+    ## stars object with 2 dimensions and 6 attributes
+    ## attribute(s):
+    ##       X1               X2               X3               X4         
+    ##  Min.   : 47.00   Min.   : 32.00   Min.   : 21.00   Min.   :  9.00  
+    ##  1st Qu.: 67.00   1st Qu.: 55.00   1st Qu.: 49.00   1st Qu.: 52.00  
+    ##  Median : 78.00   Median : 66.00   Median : 63.00   Median : 63.00  
+    ##  Mean   : 79.15   Mean   : 67.57   Mean   : 64.36   Mean   : 59.24  
+    ##  3rd Qu.: 89.00   3rd Qu.: 79.00   3rd Qu.: 77.00   3rd Qu.: 75.00  
+    ##  Max.   :255.00   Max.   :255.00   Max.   :255.00   Max.   :255.00  
+    ##       X5               X6         
+    ##  Min.   :  1.00   Min.   :  1.00  
+    ##  1st Qu.: 63.00   1st Qu.: 32.00  
+    ##  Median : 89.00   Median : 60.00  
+    ##  Mean   : 83.18   Mean   : 59.98  
+    ##  3rd Qu.:112.00   3rd Qu.: 88.00  
+    ##  Max.   :255.00   Max.   :255.00  
+    ## dimension(s):
+    ##   from  to  offset delta                       refsys point values    
+    ## x    1 349  288776  28.5 UTM Zone 25, Southern Hem... FALSE   NULL [x]
+    ## y    1 352 9120761 -28.5 UTM Zone 25, Southern Hem... FALSE   NULL [y]
+
+``` r
+ndvi = function(x) (x[4]-x[3])/(x[4]+x[3])
+st_apply(x, c("x", "y"), ndvi)
+```
+
+    ## stars object with 2 dimensions and 1 attribute
+    ## attribute(s):
+    ##      ndvi          
+    ##  Min.   :-0.75342  
+    ##  1st Qu.:-0.20301  
+    ##  Median :-0.06870  
+    ##  Mean   :-0.06432  
+    ##  3rd Qu.: 0.18667  
+    ##  Max.   : 0.58667  
+    ## dimension(s):
+    ##   from  to  offset delta                       refsys point values    
+    ## x    1 349  288776  28.5 UTM Zone 25, Southern Hem... FALSE   NULL [x]
+    ## y    1 352 9120761 -28.5 UTM Zone 25, Southern Hem... FALSE   NULL [y]
+
+## 4.4.2
+
+Compute NDVI for the S2 image, using st\_apply and an function ndvi =
+function(x) (x\[4\]-x\[3\])/(x\[4\]+x\[3\]). Plot the result, and write
+the result to a GeoTIFF. Explian the difference in runtime between
+plotting and writing.
+
+``` r
+ndvi = function(x) (x[4]-x[3])/(x[4]+x[3])
+y <- st_apply(x, c("x", "y"), ndvi)
+y
+```
+
+    ## stars object with 2 dimensions and 1 attribute
+    ## attribute(s):
+    ##      ndvi          
+    ##  Min.   :-0.75342  
+    ##  1st Qu.:-0.20301  
+    ##  Median :-0.06870  
+    ##  Mean   :-0.06432  
+    ##  3rd Qu.: 0.18667  
+    ##  Max.   : 0.58667  
+    ## dimension(s):
+    ##   from  to  offset delta                       refsys point values    
+    ## x    1 349  288776  28.5 UTM Zone 25, Southern Hem... FALSE   NULL [x]
+    ## y    1 352 9120761 -28.5 UTM Zone 25, Southern Hem... FALSE   NULL [y]
+
+Plotting and writting as GeoTIFF
+
+``` r
+tf = tempfile(fileext=".tif")
+write_stars(y, tf)
+st_drivers("raster")
+```
+
+    ##                                    name
+    ## VRT                                 VRT
+    ## DERIVED                         DERIVED
+    ## GTiff                             GTiff
+    ## NITF                               NITF
+    ## RPFTOC                           RPFTOC
+    ## ECRGTOC                         ECRGTOC
+    ## HFA                                 HFA
+    ## SAR_CEOS                       SAR_CEOS
+    ## CEOS                               CEOS
+    ## JAXAPALSAR                   JAXAPALSAR
+    ## GFF                                 GFF
+    ## ELAS                               ELAS
+    ## AIG                                 AIG
+    ## AAIGrid                         AAIGrid
+    ## GRASSASCIIGrid           GRASSASCIIGrid
+    ## SDTS                               SDTS
+    ## DTED                               DTED
+    ## PNG                                 PNG
+    ## JPEG                               JPEG
+    ## MEM                                 MEM
+    ## JDEM                               JDEM
+    ## GIF                                 GIF
+    ## BIGGIF                           BIGGIF
+    ## ESAT                               ESAT
+    ## FITS                               FITS
+    ## BSB                                 BSB
+    ## XPM                                 XPM
+    ## BMP                                 BMP
+    ## DIMAP                             DIMAP
+    ## AirSAR                           AirSAR
+    ## RS2                                 RS2
+    ## SAFE                               SAFE
+    ## PCIDSK                           PCIDSK
+    ## PCRaster                       PCRaster
+    ## ILWIS                             ILWIS
+    ## SGI                                 SGI
+    ## SRTMHGT                         SRTMHGT
+    ## Leveller                       Leveller
+    ## Terragen                       Terragen
+    ## GMT                                 GMT
+    ## netCDF                           netCDF
+    ## HDF4                               HDF4
+    ## HDF4Image                     HDF4Image
+    ## ISIS3                             ISIS3
+    ## ISIS2                             ISIS2
+    ## PDS                                 PDS
+    ## PDS4                               PDS4
+    ## VICAR                             VICAR
+    ## TIL                                 TIL
+    ## ERS                                 ERS
+    ## JP2OpenJPEG                 JP2OpenJPEG
+    ## L1B                                 L1B
+    ## FIT                                 FIT
+    ## GRIB                               GRIB
+    ## JPEG2000                       JPEG2000
+    ## RMF                                 RMF
+    ## WCS                                 WCS
+    ## WMS                                 WMS
+    ## MSGN                               MSGN
+    ## RST                                 RST
+    ## INGR                               INGR
+    ## GSAG                               GSAG
+    ## GSBG                               GSBG
+    ## GS7BG                             GS7BG
+    ## COSAR                             COSAR
+    ## TSX                                 TSX
+    ## COASP                             COASP
+    ## R                                     R
+    ## MAP                                 MAP
+    ## KMLSUPEROVERLAY         KMLSUPEROVERLAY
+    ## WEBP                               WEBP
+    ## PDF                                 PDF
+    ## Rasterlite                   Rasterlite
+    ## MBTiles                         MBTiles
+    ## PLMOSAIC                       PLMOSAIC
+    ## CALS                               CALS
+    ## WMTS                               WMTS
+    ## SENTINEL2                     SENTINEL2
+    ## MRF                                 MRF
+    ## PNM                                 PNM
+    ## DOQ1                               DOQ1
+    ## DOQ2                               DOQ2
+    ## PAux                               PAux
+    ## MFF                                 MFF
+    ## MFF2                               MFF2
+    ## FujiBAS                         FujiBAS
+    ## GSC                                 GSC
+    ## FAST                               FAST
+    ## BT                                   BT
+    ## LAN                                 LAN
+    ## CPG                                 CPG
+    ## IDA                                 IDA
+    ## NDF                                 NDF
+    ## EIR                                 EIR
+    ## DIPEx                             DIPEx
+    ## LCP                                 LCP
+    ## GTX                                 GTX
+    ## LOSLAS                           LOSLAS
+    ## NTv1                               NTv1
+    ## NTv2                               NTv2
+    ## CTable2                         CTable2
+    ## ACE2                               ACE2
+    ## SNODAS                           SNODAS
+    ## KRO                                 KRO
+    ## ROI_PAC                         ROI_PAC
+    ## RRASTER                         RRASTER
+    ## BYN                                 BYN
+    ## ARG                                 ARG
+    ## RIK                                 RIK
+    ## USGSDEM                         USGSDEM
+    ## GXF                                 GXF
+    ## BAG                                 BAG
+    ## HDF5                               HDF5
+    ## HDF5Image                     HDF5Image
+    ## NWT_GRD                         NWT_GRD
+    ## NWT_GRC                         NWT_GRC
+    ## ADRG                               ADRG
+    ## SRP                                 SRP
+    ## BLX                                 BLX
+    ## PostGISRaster             PostGISRaster
+    ## SAGA                               SAGA
+    ## IGNFHeightASCIIGrid IGNFHeightASCIIGrid
+    ## XYZ                                 XYZ
+    ## HF2                                 HF2
+    ## OZI                                 OZI
+    ## CTG                                 CTG
+    ## E00GRID                         E00GRID
+    ## ZMap                               ZMap
+    ## NGSGEOID                       NGSGEOID
+    ## IRIS                               IRIS
+    ## PRF                                 PRF
+    ## RDA                                 RDA
+    ## EEDAI                             EEDAI
+    ## DAAS                               DAAS
+    ## SIGDEM                           SIGDEM
+    ## GPKG                               GPKG
+    ## CAD                                 CAD
+    ## PLSCENES                       PLSCENES
+    ## NGW                                 NGW
+    ## GenBin                           GenBin
+    ## ENVI                               ENVI
+    ## EHdr                               EHdr
+    ## ISCE                               ISCE
+    ## HTTP                               HTTP
+    ##                                                                       long_name
+    ## VRT                                                              Virtual Raster
+    ## DERIVED                              Derived datasets using VRT pixel functions
+    ## GTiff                                                                   GeoTIFF
+    ## NITF                                       National Imagery Transmission Format
+    ## RPFTOC                                         Raster Product Format TOC format
+    ## ECRGTOC                                                         ECRG TOC format
+    ## HFA                                                 Erdas Imagine Images (.img)
+    ## SAR_CEOS                                                         CEOS SAR Image
+    ## CEOS                                                                 CEOS Image
+    ## JAXAPALSAR                           JAXA PALSAR Product Reader (Level 1.1/1.5)
+    ## GFF                    Ground-based SAR Applications Testbed File Format (.gff)
+    ## ELAS                                                                       ELAS
+    ## AIG                                                        Arc/Info Binary Grid
+    ## AAIGrid                                                     Arc/Info ASCII Grid
+    ## GRASSASCIIGrid                                                 GRASS ASCII Grid
+    ## SDTS                                                                SDTS Raster
+    ## DTED                                                      DTED Elevation Raster
+    ## PNG                                                   Portable Network Graphics
+    ## JPEG                                                                  JPEG JFIF
+    ## MEM                                                            In Memory Raster
+    ## JDEM                                                        Japanese DEM (.mem)
+    ## GIF                                          Graphics Interchange Format (.gif)
+    ## BIGGIF                                       Graphics Interchange Format (.gif)
+    ## ESAT                                                       Envisat Image Format
+    ## FITS                                            Flexible Image Transport System
+    ## BSB                                                 Maptech BSB Nautical Charts
+    ## XPM                                                           X11 PixMap Format
+    ## BMP                                        MS Windows Device Independent Bitmap
+    ## DIMAP                                                                SPOT DIMAP
+    ## AirSAR                                                AirSAR Polarimetric Image
+    ## RS2                                                      RadarSat 2 XML Product
+    ## SAFE                                                Sentinel-1 SAR SAFE Product
+    ## PCIDSK                                                     PCIDSK Database File
+    ## PCRaster                                                   PCRaster Raster File
+    ## ILWIS                                                          ILWIS Raster Map
+    ## SGI                                                   SGI Image File Format 1.0
+    ## SRTMHGT                                                     SRTMHGT File Format
+    ## Leveller                                                   Leveller heightfield
+    ## Terragen                                                   Terragen heightfield
+    ## GMT                                                      GMT NetCDF Grid Format
+    ## netCDF                                               Network Common Data Format
+    ## HDF4                                         Hierarchical Data Format Release 4
+    ## HDF4Image                                                          HDF4 Dataset
+    ## ISIS3                                   USGS Astrogeology ISIS cube (Version 3)
+    ## ISIS2                                   USGS Astrogeology ISIS cube (Version 2)
+    ## PDS                                                  NASA Planetary Data System
+    ## PDS4                                               NASA Planetary Data System 4
+    ## VICAR                                                           MIPL VICAR file
+    ## TIL                                                             EarthWatch .TIL
+    ## ERS                                                      ERMapper .ers Labelled
+    ## JP2OpenJPEG                          JPEG-2000 driver based on OpenJPEG library
+    ## L1B                                        NOAA Polar Orbiter Level 1b Data Set
+    ## FIT                                                                   FIT Image
+    ## GRIB                                               GRIdded Binary (.grb, .grb2)
+    ## JPEG2000            JPEG-2000 part 1 (ISO/IEC 15444-1), based on Jasper library
+    ## RMF                                                        Raster Matrix Format
+    ## WCS                                                    OGC Web Coverage Service
+    ## WMS                                                         OGC Web Map Service
+    ## MSGN                                             EUMETSAT Archive native (.nat)
+    ## RST                                                           Idrisi Raster A.1
+    ## INGR                                                          Intergraph Raster
+    ## GSAG                                          Golden Software ASCII Grid (.grd)
+    ## GSBG                                         Golden Software Binary Grid (.grd)
+    ## GS7BG                                      Golden Software 7 Binary Grid (.grd)
+    ## COSAR                                COSAR Annotated Binary Matrix (TerraSAR-X)
+    ## TSX                                                          TerraSAR-X Product
+    ## COASP                                           DRDC COASP SAR Processor Raster
+    ## R                                                           R Object Data Store
+    ## MAP                                                            OziExplorer .MAP
+    ## KMLSUPEROVERLAY                                               Kml Super Overlay
+    ## WEBP                                                                       WEBP
+    ## PDF                                                              Geospatial PDF
+    ## Rasterlite                                                           Rasterlite
+    ## MBTiles                                                                 MBTiles
+    ## PLMOSAIC                                                Planet Labs Mosaics API
+    ## CALS                                                              CALS (Type 1)
+    ## WMTS                                                   OGC Web Map Tile Service
+    ## SENTINEL2                                                            Sentinel 2
+    ## MRF                                                          Meta Raster Format
+    ## PNM                                             Portable Pixmap Format (netpbm)
+    ## DOQ1                                                       USGS DOQ (Old Style)
+    ## DOQ2                                                       USGS DOQ (New Style)
+    ## PAux                                                          PCI .aux Labelled
+    ## MFF                                                           Vexcel MFF Raster
+    ## MFF2                                                   Vexcel MFF2 (HKV) Raster
+    ## FujiBAS                                                  Fuji BAS Scanner Image
+    ## GSC                                                                 GSC Geogrid
+    ## FAST                                                          EOSAT FAST Format
+    ## BT                                          VTP .bt (Binary Terrain) 1.3 Format
+    ## LAN                                                             Erdas .LAN/.GIS
+    ## CPG                                                             Convair PolGASP
+    ## IDA                                                     Image Data and Analysis
+    ## NDF                                                           NLAPS Data Format
+    ## EIR                                                           Erdas Imagine Raw
+    ## DIPEx                                                                     DIPEx
+    ## LCP                                           FARSITE v.4 Landscape File (.lcp)
+    ## GTX                                                    NOAA Vertical Datum .GTX
+    ## LOSLAS                                        NADCON .los/.las Datum Grid Shift
+    ## NTv1                                                      NTv1 Datum Grid Shift
+    ## NTv2                                                      NTv2 Datum Grid Shift
+    ## CTable2                                                CTable2 Datum Grid Shift
+    ## ACE2                                                                       ACE2
+    ## SNODAS                                            Snow Data Assimilation System
+    ## KRO                                                                   KOLOR Raw
+    ## ROI_PAC                                                          ROI_PAC raster
+    ## RRASTER                                                                R Raster
+    ## BYN                                            Natural Resources Canada's Geoid
+    ## ARG                                                   Azavea Raster Grid format
+    ## RIK                                                     Swedish Grid RIK (.rik)
+    ## USGSDEM                                      USGS Optional ASCII DEM (and CDED)
+    ## GXF                                                GeoSoft Grid Exchange Format
+    ## BAG                                                  Bathymetry Attributed Grid
+    ## HDF5                                         Hierarchical Data Format Release 5
+    ## HDF5Image                                                          HDF5 Dataset
+    ## NWT_GRD                                 Northwood Numeric Grid Format .grd/.tab
+    ## NWT_GRC                              Northwood Classified Grid Format .grc/.tab
+    ## ADRG                                              ARC Digitized Raster Graphics
+    ## SRP                                         Standard Raster Product (ASRP/USRP)
+    ## BLX                                                        Magellan topo (.blx)
+    ## PostGISRaster                                             PostGIS Raster driver
+    ## SAGA                                    SAGA GIS Binary Grid (.sdat, .sg-grd-z)
+    ## IGNFHeightASCIIGrid                     IGN France height correction ASCII Grid
+    ## XYZ                                                           ASCII Gridded XYZ
+    ## HF2                                                  HF2/HFZ heightfield raster
+    ## OZI                                                      OziExplorer Image File
+    ## CTG                                              USGS LULC Composite Theme Grid
+    ## E00GRID                                                Arc/Info Export E00 GRID
+    ## ZMap                                                             ZMap Plus Grid
+    ## NGSGEOID                                            NOAA NGS Geoid Height Grids
+    ## IRIS                                               IRIS data (.PPI, .CAPPi etc)
+    ## PRF                                                         Racurs PHOTOMOD PRF
+    ## RDA                                      DigitalGlobe Raster Data Access driver
+    ## EEDAI                                               Earth Engine Data API Image
+    ## DAAS                            Airbus DS Intelligence Data As A Service driver
+    ## SIGDEM                                       Scaled Integer Gridded DEM .sigdem
+    ## GPKG                                                                 GeoPackage
+    ## CAD                                                              AutoCAD Driver
+    ## PLSCENES                                                 Planet Labs Scenes API
+    ## NGW                                                                 NextGIS Web
+    ## GenBin                                           Generic Binary (.hdr Labelled)
+    ## ENVI                                                         ENVI .hdr Labelled
+    ## EHdr                                                         ESRI .hdr Labelled
+    ## ISCE                                                                ISCE raster
+    ## HTTP                                                      HTTP Fetching Wrapper
+    ##                     write  copy is_raster is_vector   vsi
+    ## VRT                  TRUE  TRUE      TRUE     FALSE  TRUE
+    ## DERIVED             FALSE FALSE      TRUE     FALSE FALSE
+    ## GTiff                TRUE  TRUE      TRUE     FALSE  TRUE
+    ## NITF                 TRUE  TRUE      TRUE     FALSE  TRUE
+    ## RPFTOC              FALSE FALSE      TRUE     FALSE  TRUE
+    ## ECRGTOC             FALSE FALSE      TRUE     FALSE  TRUE
+    ## HFA                  TRUE  TRUE      TRUE     FALSE  TRUE
+    ## SAR_CEOS            FALSE FALSE      TRUE     FALSE  TRUE
+    ## CEOS                FALSE FALSE      TRUE     FALSE  TRUE
+    ## JAXAPALSAR          FALSE FALSE      TRUE     FALSE  TRUE
+    ## GFF                 FALSE FALSE      TRUE     FALSE  TRUE
+    ## ELAS                 TRUE FALSE      TRUE     FALSE  TRUE
+    ## AIG                 FALSE FALSE      TRUE     FALSE  TRUE
+    ## AAIGrid             FALSE  TRUE      TRUE     FALSE  TRUE
+    ## GRASSASCIIGrid      FALSE FALSE      TRUE     FALSE  TRUE
+    ## SDTS                FALSE FALSE      TRUE     FALSE  TRUE
+    ## DTED                FALSE  TRUE      TRUE     FALSE  TRUE
+    ## PNG                 FALSE  TRUE      TRUE     FALSE  TRUE
+    ## JPEG                FALSE  TRUE      TRUE     FALSE  TRUE
+    ## MEM                  TRUE FALSE      TRUE     FALSE FALSE
+    ## JDEM                FALSE FALSE      TRUE     FALSE  TRUE
+    ## GIF                 FALSE  TRUE      TRUE     FALSE  TRUE
+    ## BIGGIF              FALSE FALSE      TRUE     FALSE  TRUE
+    ## ESAT                FALSE FALSE      TRUE     FALSE  TRUE
+    ## FITS                 TRUE FALSE      TRUE     FALSE FALSE
+    ## BSB                 FALSE FALSE      TRUE     FALSE  TRUE
+    ## XPM                 FALSE  TRUE      TRUE     FALSE  TRUE
+    ## BMP                  TRUE FALSE      TRUE     FALSE  TRUE
+    ## DIMAP               FALSE FALSE      TRUE     FALSE  TRUE
+    ## AirSAR              FALSE FALSE      TRUE     FALSE  TRUE
+    ## RS2                 FALSE FALSE      TRUE     FALSE  TRUE
+    ## SAFE                FALSE FALSE      TRUE     FALSE  TRUE
+    ## PCIDSK               TRUE FALSE      TRUE      TRUE  TRUE
+    ## PCRaster             TRUE  TRUE      TRUE     FALSE FALSE
+    ## ILWIS                TRUE  TRUE      TRUE     FALSE  TRUE
+    ## SGI                  TRUE FALSE      TRUE     FALSE  TRUE
+    ## SRTMHGT             FALSE  TRUE      TRUE     FALSE  TRUE
+    ## Leveller             TRUE FALSE      TRUE     FALSE  TRUE
+    ## Terragen             TRUE FALSE      TRUE     FALSE  TRUE
+    ## GMT                 FALSE  TRUE      TRUE     FALSE FALSE
+    ## netCDF               TRUE  TRUE      TRUE      TRUE FALSE
+    ## HDF4                FALSE FALSE      TRUE     FALSE FALSE
+    ## HDF4Image            TRUE FALSE      TRUE     FALSE FALSE
+    ## ISIS3                TRUE  TRUE      TRUE     FALSE  TRUE
+    ## ISIS2                TRUE FALSE      TRUE     FALSE  TRUE
+    ## PDS                 FALSE FALSE      TRUE     FALSE  TRUE
+    ## PDS4                 TRUE  TRUE      TRUE      TRUE  TRUE
+    ## VICAR               FALSE FALSE      TRUE     FALSE  TRUE
+    ## TIL                 FALSE FALSE      TRUE     FALSE  TRUE
+    ## ERS                  TRUE FALSE      TRUE     FALSE  TRUE
+    ## JP2OpenJPEG         FALSE  TRUE      TRUE      TRUE  TRUE
+    ## L1B                 FALSE FALSE      TRUE     FALSE  TRUE
+    ## FIT                 FALSE  TRUE      TRUE     FALSE  TRUE
+    ## GRIB                FALSE  TRUE      TRUE     FALSE  TRUE
+    ## JPEG2000            FALSE  TRUE      TRUE      TRUE  TRUE
+    ## RMF                  TRUE FALSE      TRUE     FALSE  TRUE
+    ## WCS                 FALSE FALSE      TRUE     FALSE  TRUE
+    ## WMS                 FALSE  TRUE      TRUE     FALSE  TRUE
+    ## MSGN                FALSE FALSE      TRUE     FALSE  TRUE
+    ## RST                  TRUE  TRUE      TRUE     FALSE  TRUE
+    ## INGR                 TRUE  TRUE      TRUE     FALSE  TRUE
+    ## GSAG                FALSE  TRUE      TRUE     FALSE  TRUE
+    ## GSBG                 TRUE  TRUE      TRUE     FALSE  TRUE
+    ## GS7BG                TRUE  TRUE      TRUE     FALSE  TRUE
+    ## COSAR               FALSE FALSE      TRUE     FALSE  TRUE
+    ## TSX                 FALSE FALSE      TRUE     FALSE  TRUE
+    ## COASP               FALSE FALSE      TRUE     FALSE FALSE
+    ## R                   FALSE  TRUE      TRUE     FALSE  TRUE
+    ## MAP                 FALSE FALSE      TRUE     FALSE  TRUE
+    ## KMLSUPEROVERLAY     FALSE  TRUE      TRUE     FALSE  TRUE
+    ## WEBP                FALSE  TRUE      TRUE     FALSE  TRUE
+    ## PDF                  TRUE  TRUE      TRUE      TRUE FALSE
+    ## Rasterlite          FALSE  TRUE      TRUE     FALSE  TRUE
+    ## MBTiles              TRUE  TRUE      TRUE      TRUE  TRUE
+    ## PLMOSAIC            FALSE FALSE      TRUE     FALSE FALSE
+    ## CALS                FALSE  TRUE      TRUE     FALSE  TRUE
+    ## WMTS                FALSE  TRUE      TRUE     FALSE  TRUE
+    ## SENTINEL2           FALSE FALSE      TRUE     FALSE  TRUE
+    ## MRF                  TRUE  TRUE      TRUE     FALSE  TRUE
+    ## PNM                  TRUE FALSE      TRUE     FALSE  TRUE
+    ## DOQ1                FALSE FALSE      TRUE     FALSE  TRUE
+    ## DOQ2                FALSE FALSE      TRUE     FALSE  TRUE
+    ## PAux                 TRUE FALSE      TRUE     FALSE  TRUE
+    ## MFF                  TRUE  TRUE      TRUE     FALSE  TRUE
+    ## MFF2                 TRUE  TRUE      TRUE     FALSE FALSE
+    ## FujiBAS             FALSE FALSE      TRUE     FALSE  TRUE
+    ## GSC                 FALSE FALSE      TRUE     FALSE  TRUE
+    ## FAST                FALSE FALSE      TRUE     FALSE  TRUE
+    ## BT                   TRUE FALSE      TRUE     FALSE  TRUE
+    ## LAN                  TRUE FALSE      TRUE     FALSE  TRUE
+    ## CPG                 FALSE FALSE      TRUE     FALSE  TRUE
+    ## IDA                  TRUE FALSE      TRUE     FALSE  TRUE
+    ## NDF                 FALSE FALSE      TRUE     FALSE  TRUE
+    ## EIR                 FALSE FALSE      TRUE     FALSE  TRUE
+    ## DIPEx               FALSE FALSE      TRUE     FALSE  TRUE
+    ## LCP                 FALSE  TRUE      TRUE     FALSE  TRUE
+    ## GTX                  TRUE FALSE      TRUE     FALSE  TRUE
+    ## LOSLAS              FALSE FALSE      TRUE     FALSE  TRUE
+    ## NTv1                FALSE FALSE      TRUE     FALSE  TRUE
+    ## NTv2                 TRUE FALSE      TRUE     FALSE  TRUE
+    ## CTable2              TRUE FALSE      TRUE     FALSE  TRUE
+    ## ACE2                FALSE FALSE      TRUE     FALSE  TRUE
+    ## SNODAS              FALSE FALSE      TRUE     FALSE  TRUE
+    ## KRO                  TRUE FALSE      TRUE     FALSE  TRUE
+    ## ROI_PAC              TRUE FALSE      TRUE     FALSE  TRUE
+    ## RRASTER              TRUE  TRUE      TRUE     FALSE  TRUE
+    ## BYN                  TRUE FALSE      TRUE     FALSE  TRUE
+    ## ARG                 FALSE  TRUE      TRUE     FALSE  TRUE
+    ## RIK                 FALSE FALSE      TRUE     FALSE  TRUE
+    ## USGSDEM             FALSE  TRUE      TRUE     FALSE  TRUE
+    ## GXF                 FALSE FALSE      TRUE     FALSE  TRUE
+    ## BAG                 FALSE  TRUE      TRUE     FALSE  TRUE
+    ## HDF5                FALSE FALSE      TRUE     FALSE  TRUE
+    ## HDF5Image           FALSE FALSE      TRUE     FALSE  TRUE
+    ## NWT_GRD              TRUE  TRUE      TRUE     FALSE  TRUE
+    ## NWT_GRC             FALSE FALSE      TRUE     FALSE  TRUE
+    ## ADRG                 TRUE FALSE      TRUE     FALSE  TRUE
+    ## SRP                 FALSE FALSE      TRUE     FALSE  TRUE
+    ## BLX                 FALSE  TRUE      TRUE     FALSE  TRUE
+    ## PostGISRaster       FALSE  TRUE      TRUE     FALSE FALSE
+    ## SAGA                 TRUE  TRUE      TRUE     FALSE  TRUE
+    ## IGNFHeightASCIIGrid FALSE FALSE      TRUE     FALSE  TRUE
+    ## XYZ                 FALSE  TRUE      TRUE     FALSE  TRUE
+    ## HF2                 FALSE  TRUE      TRUE     FALSE  TRUE
+    ## OZI                 FALSE FALSE      TRUE     FALSE  TRUE
+    ## CTG                 FALSE FALSE      TRUE     FALSE  TRUE
+    ## E00GRID             FALSE FALSE      TRUE     FALSE  TRUE
+    ## ZMap                FALSE  TRUE      TRUE     FALSE  TRUE
+    ## NGSGEOID            FALSE FALSE      TRUE     FALSE  TRUE
+    ## IRIS                FALSE FALSE      TRUE     FALSE  TRUE
+    ## PRF                 FALSE FALSE      TRUE     FALSE  TRUE
+    ## RDA                 FALSE FALSE      TRUE     FALSE FALSE
+    ## EEDAI               FALSE FALSE      TRUE     FALSE FALSE
+    ## DAAS                FALSE FALSE      TRUE     FALSE FALSE
+    ## SIGDEM              FALSE  TRUE      TRUE     FALSE  TRUE
+    ## GPKG                 TRUE  TRUE      TRUE      TRUE  TRUE
+    ## CAD                 FALSE FALSE      TRUE      TRUE  TRUE
+    ## PLSCENES            FALSE FALSE      TRUE      TRUE FALSE
+    ## NGW                  TRUE  TRUE      TRUE      TRUE FALSE
+    ## GenBin              FALSE FALSE      TRUE     FALSE  TRUE
+    ## ENVI                 TRUE FALSE      TRUE     FALSE  TRUE
+    ## EHdr                 TRUE  TRUE      TRUE     FALSE  TRUE
+    ## ISCE                 TRUE FALSE      TRUE     FALSE  TRUE
+    ## HTTP                FALSE FALSE      TRUE      TRUE FALSE
+
+``` r
+plot(y)
+```
+
+![](Lab-1_files/figure-gfm/unnamed-chunk-20-1.png)<!-- -->
+
+## 4.4.3
+
+Use st\_transform to transform the stars object read from L7\_ETMs.tif
+to EPSG 4326. Print the object. Is this a regular grid? Plot the first
+band using arguments axes=TRUE and border=NA, and explain why this takes
+such a long time.
+
+``` r
+tif = system.file("tif/L7_ETMs.tif", package = "stars")
+x = read_stars(tif)
+new = st_crs(4326)
+y <- st_transform(x, new)
+y
+```
+
+    ## stars object with 3 dimensions and 1 attribute
+    ## attribute(s):
+    ##   L7_ETMs.tif    
+    ##  Min.   :  1.00  
+    ##  1st Qu.: 54.00  
+    ##  Median : 69.00  
+    ##  Mean   : 68.91  
+    ##  3rd Qu.: 86.00  
+    ##  Max.   :255.00  
+    ## dimension(s):
+    ##      from  to offset delta refsys point                          values    
+    ## x       1 349     NA    NA WGS 84 FALSE [349x352] -34.9165,...,-34.8261 [x]
+    ## y       1 352     NA    NA WGS 84 FALSE  [349x352] -8.0408,...,-7.94995 [y]
+    ## band    1   6     NA    NA     NA    NA                            NULL    
+    ## curvilinear grid
+
+``` r
+plot(y, axes = TRUE, border =NA)
+```
+
+![](Lab-1_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
+
+Toma mucho tiempo porque los datos de tif/L7\_ETMs.tif son tipo raster y
+al aplicarle una transformación le estamos cambiando a otro sistema de
+coordenadas lo que genera perdida de datos.
+
+## 4.4.4
+
+Use st\_warp to warp the L7\_ETMs.tif object to EPSG 4326, and plot the
+resulting object with axes=TRUE. Why is the plot created much faster
+than after st\_transform?
+
+``` r
+tif <- system.file("tif/L7_ETMs.tif", package = "stars")
+x <- read_stars(tif)
+new_crs <- st_crs(4326)
+y <- st_warp(x,crs = new_crs)
+y
+```
+
+    ## stars object with 3 dimensions and 1 attribute
+    ## attribute(s):
+    ##   L7_ETMs.tif    
+    ##  Min.   :  1.00  
+    ##  1st Qu.: 54.00  
+    ##  Median : 69.00  
+    ##  Mean   : 68.93  
+    ##  3rd Qu.: 86.00  
+    ##  Max.   :255.00  
+    ##  NA's   :8778    
+    ## dimension(s):
+    ##      from  to   offset        delta                       refsys point values
+    ## x       1 350 -34.9166  0.000259243 +proj=longlat +datum=WGS8...    NA   NULL
+    ## y       1 352 -7.94982 -0.000259243 +proj=longlat +datum=WGS8...    NA   NULL
+    ## band    1   6       NA           NA                           NA    NA   NULL
+    ##         
+    ## x    [x]
+    ## y    [y]
+    ## band
+
+``` r
+plot(y, axes = TRUE)
+```
+
+![](Lab-1_files/figure-gfm/unnamed-chunk-24-1.png)<!-- -->
+
+Se tiene mejor eficiencia comparado a utilizar st\_transform debido a
+que no se le modifica el tipo de referencia de coordenada.

@@ -316,8 +316,23 @@ plot(y, axes = TRUE)
 Se tiene mejor eficiencia comparado a utilizar st_transform debido a que no se le modifica el tipo de referencia de coordenada.
 
 
+# 6.6 Exercises
 
+## 6.6.1
 
+Add a variable to the nc dataset by nc$State = "North Carolina". Which value should you attach to this variable for the attribute-geometry relationship (agr)?
+
+```{r}
+nc <- system.file("gpkg/nc.gpkg", package="sf") %>%
+    read_sf() %>%
+    st_transform(32119)
+
+nc <- nc %>% 
+  mutate(State = "North Carolina")
+
+```
+
+Se le debe ligar a una geometría de centroide, dado que no se cuenta con una especifica para North Carolina, para esto se puede utilizar st_agr
 
 
 

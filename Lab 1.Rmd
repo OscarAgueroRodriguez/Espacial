@@ -335,6 +335,15 @@ nc <- nc %>%
 Se le debe ligar a una geometría de centroide, dado que no se cuenta con una especifica para North Carolina, para esto se puede utilizar st_agr
 
 
+## 6.6.2
+
+Create a new sf object from the geometry obtained by st_union(nc), and assign "North Carolina" to the variable State. Which agr can you now assign to this attribute variable?
+
+```{r}
+
+```
+
+
 
 
 

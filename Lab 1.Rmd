@@ -340,8 +340,63 @@ Se le debe ligar a una geometría de centroide, dado que no se cuenta con una es
 Create a new sf object from the geometry obtained by st_union(nc), and assign "North Carolina" to the variable State. Which agr can you now assign to this attribute variable?
 
 ```{r}
+nc <- system.file("gpkg/nc.gpkg", package="sf") %>%
+    read_sf() %>%
+    st_transform(32119)
+nc <- nc %>% 
+  mutate(State = "North Carolina")
+st_union(nc)
+```
+
+```{r}
+nc1 <- nc %>% select(BIR74, SID74, NAME, State) %>%
+    st_set_agr(c(BIR74 = "aggregate", SID74 = "aggregate", NAME = "identity", State = "identity"))
+nc1
+```
+
+Dado que todos pertenencen al estado de North Carolina, solo se requiere aplicar el valor "Identity" para asignar un valor unico a la geometria.
+
+## 6.6.3
+
+Use st_area to add a variable with name area to nc. Compare the area and AREA variables in the nc dataset. What are the units of AREA? Are the two linearly related? If there are discrepancies, what could be the cause?
+
+```{r}
+nc$area <- st_area(nc)
+nc1 <- head(cbind(nc$AREA, nc$area))
+nc2 <- tail(cbind(nc$AREA, nc$area))
+colnames(nc1) <- c("AREA", "area"); nc1
+```
+
+```{r}
+colnames(nc2) <- c("AREA", "area"); nc2
 
 ```
+
+Las unidades de AREA son muy similares a los de area, sin embargo, los de AREA parecen que salieran de la división de area entre 10 millones.
+
+Dado que ambas parecen tener los mismos valores, solo que una diferente escala puede decirse que si hay linearidad. Sin embargo, cabe resaltar que la similutud de los datos se da hasta el 3 decimal, ya que de ahí en adelante si pareciera existir una discrepancia en los datos.
+
+## 6.6.4
+
+Is the area variable intensive or extensive? Is its agr equal to constant, identity or aggregate?
+
+En este caso se tiene un area por lo que se tiene que utilizar extensive. Además, al ser una cantidad se debe utilizar el aggregate al usar agr.
+
+
+## 6.6.5
+
+Find the name of the county that contains POINT(-78.34046 35.017)
+
+```{r}
+nc <- system.file("gpkg/nc.gpkg", package="sf") %>%
+    read_sf() %>%
+    st_transform(32119) %>%
+    select(BIR74, SID74, NAME)
+st_geometry(nc)[[79]]
+nc[79,]
+```
+
+
 
 
 

@@ -390,10 +390,40 @@ Find the name of the county that contains POINT(-78.34046 35.017)
 ```{r}
 nc <- system.file("gpkg/nc.gpkg", package="sf") %>%
     read_sf() %>%
-    st_transform(32119) %>%
-    select(BIR74, SID74, NAME)
-st_geometry(nc)[[79]]
-nc[79,]
+    st_transform(4326)
+
+punto <- st_point( c( -78.34046, 35.017 ) )
+res <- st_contains(nc, punto)
+res <- summary(res) 
+res_1 <- as.numeric( res[,1])
+pos <- which( res_1==1 )
+nc$NAME[pos]
+
+```
+
+El punto identificado es Sampson.
+
+## 6.6.6
+
+Find the names of all counties with boundaries that touch county Sampson
+
+```{r}
+sampson_geo <- nc$geom[pos]
+
+counties_2 <- st_intersection(nc, sampson_geo)
+counties_2 <- counties_2[ counties_2$NAME!='Sampson',    ]; counties_2$NAME
+```
+
+## 6.6.7
+
+List the names of all counties that are less than 50 KM away from county Sampson
+
+```{r}
+counties_3 <- st_is_within_distance(nc, sampson_geo, dist = 50000)
+counties_3 <- summary(counties_3) 
+counties_3 <- as.numeric(counties_3[,1])
+pos <- which( counties_3==1 )
+nc$NAME[pos]
 ```
 
 

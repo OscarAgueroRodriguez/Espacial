@@ -18,6 +18,14 @@ Lab 1
       - [4.4.2](#section-9)
       - [4.4.3](#section-10)
       - [4.4.4](#section-11)
+  - [6.6 Exercises](#exercises-2)
+      - [6.6.1](#section-12)
+      - [6.6.2](#section-13)
+      - [6.6.3](#section-14)
+      - [6.6.4](#section-15)
+      - [6.6.5](#section-16)
+      - [6.6.6](#section-17)
+      - [6.6.7](#section-18)
 
 Paquetes a utilizar
 
@@ -943,3 +951,194 @@ plot(y, axes = TRUE)
 
 Se tiene mejor eficiencia comparado a utilizar st\_transform debido a
 que no se le modifica el tipo de referencia de coordenada.
+
+# 6.6 Exercises
+
+## 6.6.1
+
+Add a variable to the nc dataset by nc$State = “North Carolina”. Which
+value should you attach to this variable for the attribute-geometry
+relationship (agr)?
+
+``` r
+nc <- system.file("gpkg/nc.gpkg", package="sf") %>%
+    read_sf() %>%
+    st_transform(32119)
+
+nc <- nc %>% 
+  mutate(State = "North Carolina")
+```
+
+Se le debe ligar a una geometría de centroide, dado que no se cuenta con
+una especifica para North Carolina, para esto se puede utilizar st\_agr
+
+## 6.6.2
+
+Create a new sf object from the geometry obtained by st\_union(nc), and
+assign “North Carolina” to the variable State. Which agr can you now
+assign to this attribute variable?
+
+``` r
+nc <- system.file("gpkg/nc.gpkg", package="sf") %>%
+    read_sf() %>%
+    st_transform(32119)
+nc <- nc %>% 
+  mutate(State = "North Carolina")
+st_union(nc)
+```
+
+    ## Geometry set for 1 feature 
+    ## geometry type:  MULTIPOLYGON
+    ## dimension:      XY
+    ## bbox:           xmin: 123829.8 ymin: 14740.06 xmax: 930518.6 ymax: 318255.5
+    ## projected CRS:  NAD83 / North Carolina
+
+    ## MULTIPOLYGON (((705428.2 49242.97, 705860.3 274...
+
+``` r
+nc1 <- nc %>% select(BIR74, SID74, NAME, State) %>%
+    st_set_agr(c(BIR74 = "aggregate", SID74 = "aggregate", NAME = "identity", State = "identity"))
+nc1
+```
+
+    ## Simple feature collection with 100 features and 4 fields
+    ## Attribute-geometry relationship: 0 constant, 2 aggregate, 2 identity
+    ## geometry type:  MULTIPOLYGON
+    ## dimension:      XY
+    ## bbox:           xmin: 123829.8 ymin: 14740.06 xmax: 930518.6 ymax: 318255.5
+    ## projected CRS:  NAD83 / North Carolina
+    ## # A tibble: 100 x 5
+    ##    BIR74 SID74 NAME     State                                               geom
+    ##    <dbl> <dbl> <chr>    <chr>                                 <MULTIPOLYGON [m]>
+    ##  1  1091     1 Ashe     North Ca~ (((387344.7 278382.4, 381334.1 282769, 379438~
+    ##  2   487     0 Allegha~ North Ca~ (((408601.4 292419.4, 408564.7 293980.2, 4066~
+    ##  3  3188     5 Surry    North Ca~ (((478715.7 277484.2, 476934.3 278861, 471501~
+    ##  4   508     1 Curritu~ North Ca~ (((878193.4 289118.8, 877381 291107.7, 875993~
+    ##  5  1421     9 Northam~ North Ca~ (((769834.9 277787.4, 768364 274833.2, 762615~
+    ##  6  1452     7 Hertford North Ca~ (((812327.7 277867.5, 791157.9 277003.1, 7898~
+    ##  7   286     0 Camden   North Ca~ (((878193.4 289118.8, 883270.1 275304.7, 8811~
+    ##  8   420     0 Gates    North Ca~ (((828444.5 290086.5, 824767.3 287156.9, 8208~
+    ##  9   968     4 Warren   North Ca~ (((671746.3 278680.2, 674042.4 282229.8, 6704~
+    ## 10  1612     1 Stokes   North Ca~ (((517435.1 277851.9, 479039 279092, 481101.2~
+    ## # ... with 90 more rows
+
+Dado que todos pertenencen al estado de North Carolina, solo se requiere
+aplicar el valor “Identity” para asignar un valor unico a la geometria.
+
+## 6.6.3
+
+Use st\_area to add a variable with name area to nc. Compare the area
+and AREA variables in the nc dataset. What are the units of AREA? Are
+the two linearly related? If there are discrepancies, what could be the
+cause?
+
+``` r
+nc$area <- st_area(nc)
+nc1 <- head(cbind(nc$AREA, nc$area))
+nc2 <- tail(cbind(nc$AREA, nc$area))
+colnames(nc1) <- c("AREA", "area"); nc1
+```
+
+    ##       AREA       area
+    ## [1,] 0.114 1137590142
+    ## [2,] 0.061  611196991
+    ## [3,] 0.143 1423728763
+    ## [4,] 0.070  694661115
+    ## [5,] 0.153 1520991764
+    ## [6,] 0.097  967855261
+
+``` r
+colnames(nc2) <- c("AREA", "area"); nc2
+```
+
+    ##         AREA       area
+    ##  [95,] 0.125 1263809410
+    ##  [96,] 0.225 2288423548
+    ##  [97,] 0.214 2180999120
+    ##  [98,] 0.240 2450348999
+    ##  [99,] 0.042  430718227
+    ## [100,] 0.212 2166189958
+
+Las unidades de AREA son muy similares a los de area, sin embargo, los
+de AREA parecen que salieran de la división de area entre 10 millones.
+
+Dado que ambas parecen tener los mismos valores, solo que una diferente
+escala puede decirse que si hay linearidad. Sin embargo, cabe resaltar
+que la similutud de los datos se da hasta el 3 decimal, ya que de ahí en
+adelante si pareciera existir una discrepancia en los datos.
+
+## 6.6.4
+
+Is the area variable intensive or extensive? Is its agr equal to
+constant, identity or aggregate?
+
+En este caso se tiene un area por lo que se tiene que utilizar
+extensive. Además, al ser una cantidad se debe utilizar el aggregate al
+usar agr.
+
+## 6.6.5
+
+Find the name of the county that contains POINT(-78.34046 35.017)
+
+``` r
+nc <- system.file("gpkg/nc.gpkg", package="sf") %>%
+    read_sf() %>%
+    st_transform(4326)
+
+punto <- st_point( c( -78.34046, 35.017 ) )
+res <- st_contains(nc, punto)
+```
+
+    ## although coordinates are longitude/latitude, st_contains assumes that they are planar
+
+``` r
+res <- summary(res) 
+res_1 <- as.numeric( res[,1])
+pos <- which( res_1==1 )
+nc$NAME[pos]
+```
+
+    ## [1] "Sampson"
+
+El punto identificado es Sampson.
+
+## 6.6.6
+
+Find the names of all counties with boundaries that touch county Sampson
+
+``` r
+sampson_geo <- nc$geom[pos]
+
+counties_2 <- st_intersection(nc, sampson_geo)
+```
+
+    ## although coordinates are longitude/latitude, st_intersection assumes that they are planar
+
+    ## Warning: attribute variables are assumed to be spatially constant throughout all
+    ## geometries
+
+``` r
+counties_2 <- counties_2[ counties_2$NAME!='Sampson',    ]; counties_2$NAME
+```
+
+    ## [1] "Johnston"   "Wayne"      "Harnett"    "Cumberland" "Duplin"    
+    ## [6] "Bladen"     "Pender"
+
+## 6.6.7
+
+List the names of all counties that are less than 50 KM away from county
+Sampson
+
+``` r
+counties_3 <- st_is_within_distance(nc, sampson_geo, dist = 50000)
+counties_3 <- summary(counties_3) 
+counties_3 <- as.numeric(counties_3[,1])
+pos <- which( counties_3==1 )
+nc$NAME[pos]
+```
+
+    ##  [1] "Wake"        "Chatham"     "Wilson"      "Johnston"    "Greene"     
+    ##  [6] "Lee"         "Wayne"       "Harnett"     "Moore"       "Lenoir"     
+    ## [11] "Sampson"     "Cumberland"  "Jones"       "Hoke"        "Duplin"     
+    ## [16] "Onslow"      "Robeson"     "Bladen"      "Pender"      "Columbus"   
+    ## [21] "New Hanover" "Brunswick"

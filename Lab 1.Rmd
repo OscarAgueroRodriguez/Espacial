@@ -609,7 +609,7 @@ pal = colorNumeric("RdYlBu", domain = eastern_africa_1$pop_growth)
 leaflet(data = eastern_africa_1) %>% 
   addProviderTiles(providers$OpenStreetMap) %>%
    addPolygons(fillColor = ~pal(pop_growth), fillOpacity = .8) %>% 
-  addLegend(pal = pal, values = ~pop_growth)
+  addLegend(pal = pal, values = ~pop_growth) %>% 
   addMiniMap()
 
 ```

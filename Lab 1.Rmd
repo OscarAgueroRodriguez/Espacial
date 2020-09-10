@@ -518,6 +518,25 @@ tmap_arrange(map1, map2)
 
 Create a land cover map of the Zion National Park.
 
+Change the default colors to match your perception of the land cover categories
+
+Add a scale bar and north arrow and change the position of both to improve the map’s aesthetic appeal
+
+```{r}
+zionmap <- tm_shape(zion) + tm_fill(palette = "BuGn") + tm_layout(title = "Zion National Park") + tm_borders(lwd = 2) + tm_scale_bar(size = 1, position = "left") + tm_compass(type = "8star", position = c("RIGHT", "top"))
+
+zionmap
+```
+
+## 8.7.5
+
+Create facet maps of countries in Eastern Africa:
+With one facet showing HDI and the other representing population growth (hint: using variables HDI and pop_growth, respectively)
+With a ‘small multiple’ per country
+
+
+
+
 
 
 

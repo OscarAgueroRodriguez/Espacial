@@ -374,6 +374,7 @@ colnames(nc2) <- c("AREA", "area"); nc2
 
 Las unidades de AREA son muy similares a los de area, sin embargo, los de AREA parecen que salieran de la división de area entre 10 millones.
 
+
 Dado que ambas parecen tener los mismos valores, solo que una diferente escala puede decirse que si hay linearidad. Sin embargo, cabe resaltar que la similutud de los datos se da hasta el 3 decimal, ya que de ahí en adelante si pareciera existir una discrepancia en los datos.
 
 ## 6.6.4
@@ -442,7 +443,6 @@ zion = st_read((system.file("vector/zion.gpkg", package = "spDataLarge")))
 
 data(nlcd, package = "spDataLarge")
 ```
-
 
 ## 8.7.1
 
@@ -562,10 +562,10 @@ Showing first the spatial distribution of HDI scores then population growth
 Showing each country in order
 
 ```{r}
-m = tm_shape(eastern_africa) +
-  tm_polygons(col = c("HDI", "pop_growth")) +
-  tm_facets(ncol = 1, nrow = 1)
-m
+#m = tm_shape(eastern_africa) +
+  #tm_polygons(col = c("HDI", "pop_growth")) +
+  #tm_facets(ncol = 1, nrow = 1)
+#m
 
 #tmap_animation(m, filename = "m.gif", width = 800, delay = 25)
 #browseURL("m.gif")

@@ -523,7 +523,12 @@ Change the default colors to match your perception of the land cover categories
 Add a scale bar and north arrow and change the position of both to improve the map’s aesthetic appeal
 
 ```{r}
-zionmap <- tm_shape(zion) + tm_fill(palette = "BuGn") + tm_layout(title = "Zion National Park") + tm_borders(lwd = 2) + tm_scale_bar(size = 1, position = "left") + tm_compass(type = "8star", position = c("RIGHT", "top"))
+lc_colors <-  c("#476ba0", "#aa0000", "#b2ada3", "#68aa63", "#a58c30", "#c9c977", "#dbd83d", "#bad8ea")
+
+zionmap <- tm_shape(nlcd) + tm_raster(style = "cont", palette = lc_colors, title = "Mapa de Cobertura terrestre") + 
+  tm_shape(zion) + tm_borders(lwd = 3) +
+  tm_layout(legend.frame = TRUE, legend.position = c(0.6, "top")) +
+  tm_layout(frame.lwd = 4)
 
 zionmap
 ```
@@ -534,8 +539,80 @@ Create facet maps of countries in Eastern Africa:
 With one facet showing HDI and the other representing population growth (hint: using variables HDI and pop_growth, respectively)
 With a ‘small multiple’ per country
 
+```{r}
+eastern_africa = filter(africa, subregion == "Eastern Africa")
+```
+
+```{r}
+tm_shape(eastern_africa) +
+  tm_polygons(col = c("HDI", "pop_growth"))
+
+```
+
+```{r}
+tm_shape(eastern_africa) +
+  tm_polygons("pop_growth", palette = "BuGn") +
+  tm_facets(by = "name", drop.NA.facets = TRUE)
+```
+
+## 8.7.6
+
+Building on the previous facet map examples, create animated maps of East Africa:
+Showing first the spatial distribution of HDI scores then population growth
+Showing each country in order
+
+```{r}
+m = tm_shape(eastern_africa) +
+  tm_polygons(col = c("HDI", "pop_growth")) +
+  tm_facets(ncol = 1, nrow = 1)
+m
+
+#tmap_animation(m, filename = "m.gif", width = 800, delay = 25)
+#browseURL("m.gif")
+```
+
+Me da error porque no encuentra ImageMagick
+
+Error in tmap_animation(m, filename = "m.gif", width = 800, delay = 25) : Could not find ImageMagick. Make sure it is installed and included in the systems PATH
 
 
+## 8.7.7
+
+Create an interactive map of Africa:
+With tmap
+With mapview
+With leaflet
+Bonus: For each approach, add a legend (if not automatically provided) and a scale bar
+
+Con tmap
+
+```{r}
+tmap_mode("view")
+tm_shape(eastern_africa) +
+  tm_polygons("pop_growth")
+```
+
+con mapview
+
+```{r}
+mapview(eastern_africa, zcol = "pop_growth")
+```
+
+
+con leaflet
+
+```{r}
+library(leaflet)
+eastern_africa_1 <- st_transform(eastern_africa, 4326)
+pal = colorNumeric("RdYlBu", domain = eastern_africa_1$pop_growth)
+
+leaflet(data = eastern_africa_1) %>% 
+  addProviderTiles(providers$OpenStreetMap) %>%
+   addPolygons(fillColor = ~pal(pop_growth), fillOpacity = .8) %>% 
+  addLegend(pal = pal, values = ~pop_growth)
+  addMiniMap()
+
+```
 
 
 

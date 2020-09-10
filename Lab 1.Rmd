@@ -426,11 +426,97 @@ pos <- which( counties_3==1 )
 nc$NAME[pos]
 ```
 
+# 8.7 Exercises
+
+```{r}
+africa = world %>% 
+   filter(continent == "Africa", !is.na(iso_a2)) %>% 
+   left_join(worldbank_df, by = "iso_a2") %>% 
+   dplyr::select(name, subregion, gdpPercap, HDI, pop_growth) %>% 
+   st_transform("+proj=aea +lat_1=20 +lat_2=-23 +lat_0=0 +lon_0=25")
+```
 
 
+```{r}
+zion = st_read((system.file("vector/zion.gpkg", package = "spDataLarge")))
+
+data(nlcd, package = "spDataLarge")
+```
 
 
+## 8.7.1
 
+Create a map showing the geographic distribution of the Human Development Index (HDI) across Africa with base graphics (hint: use plot()) and tmap packages (hint: use tm_shape(africa) + ...).
+
+Usando plot()
+
+```{r}
+plot(africa[4])
+```
+
+Usando tm_shape
+
+```{r}
+tm_shape(africa)+ tm_polygons(col = "HDI")
+```
+
+Ventaja 1: con tm_shape la programación es similar a ggplot2 lo cual permite tener claridad en lo que se quiere programar de manera lógica.
+
+Ventaja 2: Al utilizar plot, no fue directo que se logra tener el mapa deseado, primero tuve que probar hasta encontrar (esto no lo reflejo en el código), con tm_shape se puede hacer directo lo que se busca al gráficar.
+
+Otras formas de graficar pueden ser con ggplot2, cartogram y mapview todas son librerias de R, por lo cual se pueden utilizar sin tener que agregar costo a un trabajo o una investigación.
+
+Bonus
+
+Usando cartogram
+
+```{r}
+library(cartogram)
+africa_carto = cartogram_ncont(africa, "HDI")
+tm_shape(africa_carto) + tm_polygons(col = "HDI")
+
+```
+
+Usando ggplot2
+
+```{r}
+g1 <- ggplot() + geom_sf(data = africa, aes(fill = HDI))
+g1
+```
+
+## 8.7.2
+
+Extend the tmap created for the previous exercise so the legend has three bins: “High” (HDI above 0.7), “Medium” (HDI between 0.55 and 0.7) and “Low” (HDI below 0.55).
+
+```{r}
+
+africa = africa %>% mutate(rango_HDI=case_when(HDI<0.55~'bajo',
+                                               HDI>=0.55 & HDI<0.7  ~'medio',
+                                               HDI>0.7 ~'alto',
+                                               TRUE~'nd'))
+
+map1 <- tm_shape(africa)+ tm_fill(col = "rango_HDI") + tm_borders(col = "black") + tm_layout(title = "Africa por HDI") + tm_layout(scale = 2) + tm_layout(bg.color = "lightblue") + tm_compass(type = "8star", position = c("right", "top"))
+
+map1
+```
+
+## 8.7.3
+
+Represent africa’s subregions on the map. Change the default color palette and legend title. Next, combine this map and the map created in the previous exercise into a single plot.
+
+
+```{r}
+map2 <- tm_shape(africa)+ tm_fill(col = "subregion", palette = "Set2") + tm_layout(title = "Africa por subregiones")
+map2
+```
+
+```{r}
+tmap_arrange(map1, map2)
+```
+
+## 8.7.4
+
+Create a land cover map of the Zion National Park.
 
 
 

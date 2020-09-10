@@ -26,6 +26,14 @@ Lab 1
       - [6.6.5](#section-16)
       - [6.6.6](#section-17)
       - [6.6.7](#section-18)
+  - [8.7 Exercises](#exercises-3)
+      - [8.7.1](#section-19)
+      - [8.7.2](#section-20)
+      - [8.7.3](#section-21)
+      - [8.7.4](#section-22)
+      - [8.7.5](#section-23)
+      - [8.7.6](#section-24)
+      - [8.7.7](#section-25)
 
 Paquetes a utilizar
 
@@ -1142,3 +1150,229 @@ nc$NAME[pos]
     ## [11] "Sampson"     "Cumberland"  "Jones"       "Hoke"        "Duplin"     
     ## [16] "Onslow"      "Robeson"     "Bladen"      "Pender"      "Columbus"   
     ## [21] "New Hanover" "Brunswick"
+
+# 8.7 Exercises
+
+``` r
+africa = world %>% 
+   filter(continent == "Africa", !is.na(iso_a2)) %>% 
+   left_join(worldbank_df, by = "iso_a2") %>% 
+   dplyr::select(name, subregion, gdpPercap, HDI, pop_growth) %>% 
+   st_transform("+proj=aea +lat_1=20 +lat_2=-23 +lat_0=0 +lon_0=25")
+```
+
+``` r
+zion = st_read((system.file("vector/zion.gpkg", package = "spDataLarge")))
+```
+
+    ## Reading layer `zion' from data source `C:\Users\Oscar\Documents\R\win-library\4.0\spDataLarge\vector\zion.gpkg' using driver `GPKG'
+    ## Simple feature collection with 1 feature and 11 fields
+    ## geometry type:  POLYGON
+    ## dimension:      XY
+    ## bbox:           xmin: 302903.1 ymin: 4112244 xmax: 334735.5 ymax: 4153087
+    ## projected CRS:  UTM Zone 12, Northern Hemisphere
+
+``` r
+data(nlcd, package = "spDataLarge")
+```
+
+## 8.7.1
+
+Create a map showing the geographic distribution of the Human
+Development Index (HDI) across Africa with base graphics (hint: use
+plot()) and tmap packages (hint: use tm\_shape(africa) + …).
+
+Usando plot()
+
+``` r
+plot(africa[4])
+```
+
+![](Lab-1_files/figure-gfm/unnamed-chunk-35-1.png)<!-- -->
+
+Usando tm\_shape
+
+``` r
+tm_shape(africa)+ tm_polygons(col = "HDI")
+```
+
+![](Lab-1_files/figure-gfm/unnamed-chunk-36-1.png)<!-- -->
+
+Ventaja 1: con tm\_shape la programación es similar a ggplot2 lo cual
+permite tener claridad en lo que se quiere programar de manera lógica.
+
+Ventaja 2: Al utilizar plot, no fue directo que se logra tener el mapa
+deseado, primero tuve que probar hasta encontrar (esto no lo reflejo en
+el código), con tm\_shape se puede hacer directo lo que se busca al
+gráficar.
+
+Otras formas de graficar pueden ser con ggplot2, cartogram y mapview
+todas son librerias de R, por lo cual se pueden utilizar sin tener que
+agregar costo a un trabajo o una investigación.
+
+Bonus
+
+Usando cartogram
+
+``` r
+library(cartogram)
+africa_carto = cartogram_ncont(africa, "HDI")
+tm_shape(africa_carto) + tm_polygons(col = "HDI")
+```
+
+![](Lab-1_files/figure-gfm/unnamed-chunk-37-1.png)<!-- -->
+
+Usando ggplot2
+
+``` r
+g1 <- ggplot() + geom_sf(data = africa, aes(fill = HDI))
+g1
+```
+
+![](Lab-1_files/figure-gfm/unnamed-chunk-38-1.png)<!-- -->
+
+## 8.7.2
+
+Extend the tmap created for the previous exercise so the legend has
+three bins: “High” (HDI above 0.7), “Medium” (HDI between 0.55 and 0.7)
+and “Low” (HDI below 0.55).
+
+``` r
+africa = africa %>% mutate(rango_HDI=case_when(HDI<0.55~'bajo',
+                                               HDI>=0.55 & HDI<0.7  ~'medio',
+                                               HDI>0.7 ~'alto',
+                                               TRUE~'nd'))
+
+map1 <- tm_shape(africa)+ tm_fill(col = "rango_HDI") + tm_borders(col = "black") + tm_layout(title = "Africa por HDI") + tm_layout(scale = 2) + tm_layout(bg.color = "lightblue") + tm_compass(type = "8star", position = c("right", "top"))
+
+map1
+```
+
+![](Lab-1_files/figure-gfm/unnamed-chunk-39-1.png)<!-- -->
+
+## 8.7.3
+
+Represent africa’s subregions on the map. Change the default color
+palette and legend title. Next, combine this map and the map created in
+the previous exercise into a single plot.
+
+``` r
+map2 <- tm_shape(africa)+ tm_fill(col = "subregion", palette = "Set2") + tm_layout(title = "Africa por subregiones")
+map2
+```
+
+![](Lab-1_files/figure-gfm/unnamed-chunk-40-1.png)<!-- -->
+
+``` r
+tmap_arrange(map1, map2)
+```
+
+![](Lab-1_files/figure-gfm/unnamed-chunk-41-1.png)<!-- -->
+
+## 8.7.4
+
+Create a land cover map of the Zion National Park.
+
+Change the default colors to match your perception of the land cover
+categories
+
+Add a scale bar and north arrow and change the position of both to
+improve the map’s aesthetic appeal
+
+``` r
+lc_colors <-  c("#476ba0", "#aa0000", "#b2ada3", "#68aa63", "#a58c30", "#c9c977", "#dbd83d", "#bad8ea")
+
+zionmap <- tm_shape(nlcd) + tm_raster(style = "cont", palette = lc_colors, title = "Mapa de Cobertura terrestre") + 
+  tm_shape(zion) + tm_borders(lwd = 3) +
+  tm_layout(legend.frame = TRUE, legend.position = c(0.6, "top")) +
+  tm_layout(frame.lwd = 4)
+
+zionmap
+```
+
+    ## stars object downsampled to 888 by 1125 cells. See tm_shape manual (argument raster.downsample)
+
+    ## Warning in rep(attr(shp[[1]], "colors"), length.out = length(lvls)): 'x' is NULL
+    ## so the result will be NULL
+
+![](Lab-1_files/figure-gfm/unnamed-chunk-42-1.png)<!-- -->
+
+## 8.7.5
+
+Create facet maps of countries in Eastern Africa: With one facet showing
+HDI and the other representing population growth (hint: using variables
+HDI and pop\_growth, respectively) With a ‘small multiple’ per country
+
+``` r
+eastern_africa = filter(africa, subregion == "Eastern Africa")
+```
+
+``` r
+tm_shape(eastern_africa) +
+  tm_polygons(col = c("HDI", "pop_growth"))
+```
+
+![](Lab-1_files/figure-gfm/unnamed-chunk-44-1.png)<!-- -->
+
+``` r
+tm_shape(eastern_africa) +
+  tm_polygons("pop_growth", palette = "BuGn") +
+  tm_facets(by = "name", drop.NA.facets = TRUE)
+```
+
+![](Lab-1_files/figure-gfm/unnamed-chunk-45-1.png)<!-- -->
+
+## 8.7.6
+
+Building on the previous facet map examples, create animated maps of
+East Africa: Showing first the spatial distribution of HDI scores then
+population growth Showing each country in order
+
+``` r
+#m = tm_shape(eastern_africa) +
+  #tm_polygons(col = c("HDI", "pop_growth")) +
+  #tm_facets(ncol = 1, nrow = 1)
+#m
+
+#tmap_animation(m, filename = "m.gif", width = 800, delay = 25)
+#browseURL("m.gif")
+```
+
+Me da error porque no encuentra ImageMagick
+
+Error in tmap\_animation(m, filename = “m.gif”, width = 800, delay = 25)
+: Could not find ImageMagick. Make sure it is installed and included in
+the systems PATH
+
+## 8.7.7
+
+Create an interactive map of Africa: With tmap With mapview With leaflet
+Bonus: For each approach, add a legend (if not automatically provided)
+and a scale bar
+
+Con tmap
+
+``` r
+#tmap_mode("view")
+#tm_shape(eastern_africa) +
+  #tm_polygons("pop_growth")
+```
+
+con mapview
+
+``` r
+#mapview(eastern_africa, zcol = "pop_growth")
+```
+
+con leaflet
+
+``` r
+#library(leaflet)
+#eastern_africa_1 <- st_transform(eastern_africa, 4326)
+#pal = colorNumeric("RdYlBu", domain = eastern_africa_1$pop_growth)
+
+#leaflet(data = eastern_africa_1) %>% 
+  #addProviderTiles(providers$OpenStreetMap) %>%
+   #addPolygons(fillColor = ~pal(pop_growth), fillOpacity = .8) %>% 
+  #addLegend(pal = pal, values = ~pop_growth)
+```

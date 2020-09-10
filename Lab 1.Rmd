@@ -588,29 +588,29 @@ Bonus: For each approach, add a legend (if not automatically provided) and a sca
 Con tmap
 
 ```{r}
-tmap_mode("view")
-tm_shape(eastern_africa) +
-  tm_polygons("pop_growth")
+#tmap_mode("view")
+#tm_shape(eastern_africa) +
+  #tm_polygons("pop_growth")
 ```
 
 con mapview
 
 ```{r}
-mapview(eastern_africa, zcol = "pop_growth")
+#mapview(eastern_africa, zcol = "pop_growth")
 ```
 
 
 con leaflet
 
 ```{r}
-library(leaflet)
-eastern_africa_1 <- st_transform(eastern_africa, 4326)
-pal = colorNumeric("RdYlBu", domain = eastern_africa_1$pop_growth)
+#library(leaflet)
+#eastern_africa_1 <- st_transform(eastern_africa, 4326)
+#pal = colorNumeric("RdYlBu", domain = eastern_africa_1$pop_growth)
 
-leaflet(data = eastern_africa_1) %>% 
-  addProviderTiles(providers$OpenStreetMap) %>%
-   addPolygons(fillColor = ~pal(pop_growth), fillOpacity = .8) %>% 
-  addLegend(pal = pal, values = ~pop_growth)
+#leaflet(data = eastern_africa_1) %>% 
+  #addProviderTiles(providers$OpenStreetMap) %>%
+   #addPolygons(fillColor = ~pal(pop_growth), fillOpacity = .8) %>% 
+  #addLegend(pal = pal, values = ~pop_growth)
 
 ```
 

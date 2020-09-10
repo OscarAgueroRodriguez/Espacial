@@ -280,7 +280,7 @@ plot(y)
 
 Use st_transform to transform the stars object read from L7_ETMs.tif to EPSG 4326. Print the object. Is this a regular grid? Plot the first band using arguments axes=TRUE and border=NA, and explain why this takes such a long time.
 
-```{r}
+```{r, cache=TRUE}
 tif = system.file("tif/L7_ETMs.tif", package = "stars")
 x = read_stars(tif)
 new = st_crs(4326)
@@ -289,7 +289,7 @@ y
 
 ```
 
-```{r}
+```{r, cache=TRUE}
 
 plot(y, axes = TRUE, border =NA)
 
@@ -301,7 +301,8 @@ Toma mucho tiempo porque los datos de tif/L7_ETMs.tif son tipo raster y al aplic
 
 Use st_warp to warp the L7_ETMs.tif object to EPSG 4326, and plot the resulting object with axes=TRUE. Why is the plot created much faster than after st_transform?
 
-```{r}
+```{r, cache=TRUE}
+
 tif <- system.file("tif/L7_ETMs.tif", package = "stars")
 x <- read_stars(tif)
 new_crs <- st_crs(4326)

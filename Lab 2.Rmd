@@ -52,5 +52,26 @@ data <- data[!is.na(data$Longitude)&!is.na(data$Latitude),]
 
 ## Point Pattern Analysis
 
+Primero se define las coordenadas de la base en función de la longitud y latitud del dataset.
+Se necesita resolver el problema de los duplicados, ya que en el dataset se tiene dos crimenes en un mismo punto de referencia, por ejemplo. Esto es necesario resolverlo antes de realizar la proyección de los datos.
+
+```{r}
+coordinates(data)=~Longitude+Latitude
+zero <- zerodist(data)
+length(unique(zero[,1]))
+```
+
+Se descarga el archivo .shp
+
+Nota: Se documenta la descarga y la extracción de los datos debido a que ya se ejecuto 1 vez, no es necesario repetir el proceso para efectos de este trabajo
+
+```{r}
+#download.file("http://www.naturalearthdata.com/http//www.naturalearthdata.com/download/10m/cultural/ne_10m_admin_1_states_provinces.zip",destfile="ne_10m_admin_1_states_provinces.zip")
+
+#unzip("ne_10m_admin_1_states_provinces.zip",exdir="NaturalEarth")
+
+border <- shapefile("NaturalEarth/ne_10m_admin_1_states_provinces.shp")
+
+```
 
 

@@ -12,6 +12,34 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r}
+library(starsdata)
+library(tidyverse)
+library(sf)
+library(mapview)
+library(stars)
+library(RSQLite)
+library(spacetime)
+library(xts)
+library(spDataLarge)
+library(units)
+library(cubelyr)
+library(base)
+library(nlme)
+library(spatstat.data)
+library(rpart)
+library(spatstat)
+library(raster)
+library(plotrix)
+library(maptools)
+```
 
+Lectura de los datos a utilizar, son datos de la región de londres y su contenido son crimes entre Mayo y Junio del año 2014.
+
+```{r}
+setwd("~/Estadística/Spacial Stats")
+data <- read.csv("london_street.csv", header = T, sep = ",")
+data <- data[, 2:13]
+```
 
 

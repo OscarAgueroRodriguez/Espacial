@@ -8,6 +8,9 @@ output:
     toc_depth: 2
 ---
 
+# Laboratorio 2
+
+## Paquetes a utilizar
 
 ```{r}
 library(starsdata)
@@ -31,12 +34,23 @@ library(plotrix)
 library(maptools)
 ```
 
+## Carga de dataset
+
 Lectura de los datos a utilizar, son datos de la región de londres y su contenido son crimes entre Mayo y Junio del año 2014.
 
 ```{r}
 setwd("~/Estadística/Spacial Stats")
 data <- read.csv("london_street.csv", header = T, sep = ",")
 data <- data[, 2:13]
+str(data)
 ```
+Limpieza de los datos, principalmente en eliminar los NA's del dataset.
+ 
+```{r}
+data <- data[!is.na(data$Longitude)&!is.na(data$Latitude),]
+```
+
+## Point Pattern Analysis
+
 
 

@@ -74,4 +74,37 @@ border <- shapefile("NaturalEarth/ne_10m_admin_1_states_provinces.shp")
 
 ```
 
+Se extrae solo el poligono de Londres para efectos del trabajo de crimes.
+
+```{r}
+GreaterLondon <- border[paste(border$region)=="Greater London",]
+```
+
+se busca trasponer los datos de crimes de Londres con el poligono de Londres, por lo que se requiere traslaparlos, eliminando primero aquellos puntos que no estan dentro del poligono de Londres. Para lo anterior se realiza la proyeccion de los datos con respecto a Londres, de traslapan y se eliminan los Na's
+
+```{r}
+projection(data)=projection(border)
+overlay <- over(data,GreaterLondon)
+data$over <- overlay$adm1_code
+data.London <- data[!is.na(data$over),]
+summary(data.London$Crime.type)
+```
+
+Se grafican los puntos proyectado para Londres sobre el poligono .shp, en este gráfico solo vamos a obtener los puntos que quedaron dentro del poligono, efecto de lo que se realizo en el chunk anterior.
+
+```{r}
+plot(data.London,pch="+",cex=0.5,main="",col=as.factor(data.London$Crime.type))
+plot(GreaterLondon,add=T)
+legend(x=-0.53,y=51.41,pch="+",col=unique(as.factor(data.London$Crime.type)),legend=unique(data.London$Crime.type),cex=0.4)
+```
+
+
+
+
+
+
+
+
+
+
 

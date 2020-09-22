@@ -1376,3 +1376,4 @@ con leaflet
    #addPolygons(fillColor = ~pal(pop_growth), fillOpacity = .8) %>% 
   #addLegend(pal = pal, values = ~pop_growth)
 ```
+Laboratorio 1 versión final

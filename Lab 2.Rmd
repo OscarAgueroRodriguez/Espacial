@@ -191,6 +191,30 @@ barplot(Local.Intensity[order(Local.Intensity[,2]),2],names.arg=Local.Intensity[
 
 ```
 
+En este grafico podemos ver que la mayor concentración de casos se da en la ciudad de Newham, seguido de Brent.
+
+Este análisis se puede convinar empleando un suavizamiento de Kernel. Para esto se puede utilizar la funciones bw.diggle, bww.ppl y bw.scott, las cuales se usan para determinar como se comportan los datos según el ancho de banda estimado.
+
+```{r}
+par(mfrow=c(2,2))
+plot(density.ppp(Drugs.ppp, sigma = bw.diggle(Drugs.ppp), edge = T), main = paste("h =", round(bw.diggle(Drugs.ppp), 2)))
+plot(density.ppp(Drugs.ppp, sigma = bw.ppl(Drugs.ppp), edge = T), main = paste("h =", round(bw.ppl(Drugs.ppp), 2)))
+plot(density.ppp(Drugs.ppp, sigma = bw.scott(Drugs.ppp)[2],edge=T), main = paste("h =", round(bw.scott(Drugs.ppp)[2], 2)))
+plot(density.ppp(Drugs.ppp, sigma = bw.scott(Drugs.ppp)[1],edge = T), main = paste("h =",round(bw.scott(Drugs.ppp)[1], 2)))
+```
+
+Por último, se puede obtener las curvas de distribución G, esta función calcula la distribución de las distancias entre cada evento y su vecino más cercano.
+
+```{r}
+plot(Gest(Drugs.ppp),main="Drug Related Crimes")
+```
+
+## Conclusion
+
+Como parte del estudio realizado se puede ver como si hay agrupamiento claro de casos en ciertos sectores donde se da una mayor concentración de casos vinculados a crimenes ligados a drogas.
+
+La menor cantidad de casos se dan en la perifería de Londres, y se concentran más hacía el centro de la ciudad.
+
 
 
 

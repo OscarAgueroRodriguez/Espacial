@@ -157,18 +157,39 @@ Drugs.ppp <- ppp(x=Drugs.UTM@coords[,1],y=Drugs.UTM@coords[,2],window=window)
 GreaterLondonUTM <- spTransform(GreaterLondon,CRS("+init=epsg:32630"))
 ```
 
-Se realiza una divición con el fin de tener 
+Se realiza una divición con el fin de tener la intensidad de delitos relacionados a las drogas.
  
 ```{r}
 Drugs.ppp$n/sum(sapply(slot(GreaterLondonUTM, "polygons"), slot, "area"))
 ```
-
+Se gráfica este índice representado por cuadrantes.
 
 ```{r}
 plot(Drugs.ppp,pch="+",cex=0.5,main="Drugs")
 plot(quadratcount(Drugs.ppp, nx = 4, ny = 4),add=T,col="blue")
 ```
 
+En la siguiente iteración lo que se busca es extraer los datos de tal manera que nos permita graficar los datos que se tienen a nivel del polígono y poder graficar un gráfico distinto.
+
+```{r, message=FALSE}
+Local.Intensity <- data.frame(Borough=factor(),Number=numeric())
+
+for(i in unique(GreaterLondonUTM$name)){
+  sub.pol <- GreaterLondonUTM[GreaterLondonUTM$name==i,]
+  
+  sub.ppp <- ppp(x=Drugs.ppp$x,y=Drugs.ppp$y,window=as.owin(sub.pol))
+  Local.Intensity <- rbind(Local.Intensity,data.frame(Borough=factor(i,levels=GreaterLondonUTM$name),Number=sub.ppp$n))
+}
+
+```
+
+```{r}
+colorScale <- color.scale(Local.Intensity[order(Local.Intensity[,2]),2],color.spec="rgb",extremes=c("green","red"),alpha=0.8)
+
+par(mar=c(5,13,4,2)) 
+barplot(Local.Intensity[order(Local.Intensity[,2]),2],names.arg=Local.Intensity[order(Local.Intensity[,2]),1],horiz=T,las=2,space=1,col=colorScale)
+
+```
 
 
 

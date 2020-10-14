@@ -1,0 +1,13 @@
+---
+title: "Laboratorio 3"
+author: "Óscar Agüero Rodriguez"
+date: "14/10/2020"
+github_document:
+    toc: TRUE
+    toc_depth: 2
+---
+
+
+
+
+

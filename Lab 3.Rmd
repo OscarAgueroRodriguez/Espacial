@@ -96,7 +96,6 @@ Comparando los métodos por medio de RMSE, se puede ver que entre el IDW óptimo
 
 Se puede ver como los resultados obtenidos por medio de IDW concentran los niveles de contaminación en la zona sur de california, con la particularidad de que abarca una mayor área de todo el mapa en la zona sur, diferente a lo que muestra OK, el cual si bien, también muestra que la concentración de contaminación es mayor al sur de california, muestra que los niveles altos de contaminación se ubican al centro del mapa en el sur del mismo.
 
-
 ## Pregunta 8: ¿Muestre dónde está la diferencia entre IDW y OK dentro del límite de confianza del 95% de la predicción OK?
 
 

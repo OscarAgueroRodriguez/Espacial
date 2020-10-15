@@ -7,6 +7,9 @@ github_document:
     toc_depth: 2
 ---
 
+# Laboratorio 3 Geoestadística
+
+
 # Introducción
 
 La geoestadística es la rama de la estadística que se encarga del análisis de fenómenos espaciales que exhiben un comportamiento estructural. Parte de los mecanismos que están asociados a la geoestadística se encuentra la interpolación, la cual es un proceso donde se utilizan puntos con valores conocidos para estimar valores desconocidos en otros puntos.
@@ -98,7 +101,9 @@ Se puede ver como los resultados obtenidos por medio de IDW concentran los nivel
 
 ## Pregunta 8: ¿Muestre dónde está la diferencia entre IDW y OK dentro del límite de confianza del 95% de la predicción OK?
 
+Las diferencias se pueden ver a nivel de los mapas, ya que en la interpolación de los mapas se aprecia que la interpolación con IDW genera una predicción de casos de alta contaminación principalmente en la zona sur de California, distinto a lo que se logra ver utilizando OK. No pude calcular los límites de confianza, pero tendería a pensar que los límites del método IDW son más amplios que los que da el método OK.
 
 ## Pregunta 9: ¿Puede describir el patrón que se está observando y especular sobre que lo puede estar causando?
 
+Especulo que el patrón observado obedece a una predicción donde los límites de confianza son mayores de ahí que en IDW se tenga una mayor cobertura de contaminación en la zona sur de California, distinto a lo que se observa en el método OK y en TPS.
 

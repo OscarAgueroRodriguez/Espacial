@@ -2,5 +2,8 @@
 title: "Laboratorio 5"
 author: "Óscar Agüero Rodriguez"
 date: "7/11/2020"
-output: html_document
+output: 
+  github_document:
+    toc: TRUE
+    toc_depth: 2
 ---

@@ -65,6 +65,7 @@ library(raster)
 library(spData)
 library(sf)
 library(spdep)
+library(boot)
 
 p <- shapefile(system.file("external/lux.shp", package="raster"))
 p <- p[p$NAME_1=="Diekirch", ]
@@ -124,7 +125,7 @@ moran.mc(p$value, ww, nsim = 99)
     ## weights: ww  
     ## number of simulations + 1: 100 
     ## 
-    ## statistic = 0.17289, observed rank = 98, p-value = 0.02
+    ## statistic = 0.17289, observed rank = 98.5, p-value = 0.015
     ## alternative hypothesis: greater
 
 con un alpha = 5% y un p-value = 0,02 se tiene suficiente evidencia
@@ -162,7 +163,7 @@ moran.mc(p$value, ww, nsim = 120)
     ## weights: ww  
     ## number of simulations + 1: 121 
     ## 
-    ## statistic = 0.17289, observed rank = 118.5, p-value = 0.02066
+    ## statistic = 0.17289, observed rank = 119, p-value = 0.01653
     ## alternative hypothesis: greater
 
 ## 4\.
@@ -219,6 +220,53 @@ C tiene valores bajos sugiere correlación positiva.
 Escriba su propia prueba de simulación de Monte Carlo para calcular los
 valores p para la I de Moran, replicando los resultados que obtuvimos
 con la función de spdep. Muestre un histograma de los valores simulados.
+
+``` r
+set.seed(1234)
+y <- p$value
+ybar <- mean(y)
+bperm <- moran.mc(y, listw=ww, nsim=99)
+bperm
+```
+
+    ## 
+    ##  Monte-Carlo simulation of Moran I
+    ## 
+    ## data:  y 
+    ## weights: ww  
+    ## number of simulations + 1: 100 
+    ## 
+    ## statistic = 0.17289, observed rank = 98, p-value = 0.02
+    ## alternative hypothesis: greater
+
+``` r
+CR <- function(var, mle) rpois(length(var), lambda=mle) # genera poissons
+MoranI.pboot <- function(var, i, listw, n, S0, ...) {
+  return(moran(x=var, listw=listw, n=n, S0=S0)$I)
+}
+```
+
+``` r
+set.seed(1234)
+
+boot2 <- boot(y, statistic=MoranI.pboot, R=99, sim="parametric",
+  ran.gen=CR, listw=ww, n=length(y), S0=Szero(ww), mle=ybar)
+pnorm((boot2$t0 - mean(boot2$t))/sd(boot2$t[,1]), lower.tail=FALSE)
+```
+
+    ## [1] 0.02015095
+
+``` r
+oopar <- par(mfrow=c(1,2))
+xlim <- range(c(bperm$res, boot2$t[,1]))
+hist(bperm$res[-length(bperm$res)], main="Permutation bootstrap", xlab=expression(I[std]), xlim=xlim, density=15, angle=45, ylim=c(0,260))
+abline(v=bperm$statistic, lty=2)
+hist(boot2$t, col=rgb(0.4,0.4,0.4), main="Parametric bootstrap", xlab=expression(I[CR]), xlim=xlim, ylim=c(0,50))
+hist(bperm$res[-length(bperm$res)], density=15, angle=45, add=TRUE)
+abline(v=boot2$t0, lty=2)
+```
+
+![](Lab-5_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
 
 ## 6\.
 
